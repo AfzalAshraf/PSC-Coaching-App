@@ -112,6 +112,7 @@ jobs:
       - name: Publish or update the public Latest release
         env:
           GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
           PSC_COACH_VERSION: 2.0.${{ github.run_number }}
         run: |
           set -euo pipefail
