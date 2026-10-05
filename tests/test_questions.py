@@ -53,6 +53,7 @@ class QuestionBankTests(unittest.TestCase):
                     "options": {"A": "Official report", "B": "Blog", "C": "Rumour", "D": "Advertisement"},
                     "answer": "A",
                     "explanation": "Use a traceable official source.",
+                    "mnemonic": "Source and date travel together.",
                     "source_hint": "Dated example source, 2025-01.",
                 },
                 {
@@ -68,6 +69,7 @@ class QuestionBankTests(unittest.TestCase):
         validated = validate_question_pack(pack)
         self.assertEqual(len(validated), 2)
         self.assertEqual(validated[0]["answer"], "A")
+        self.assertEqual(validated[0]["mnemonic"], "Source and date travel together.")
         self.assertEqual(validated[1]["answer"], "C")
 
     def test_bad_packs_are_rejected_with_useful_errors(self):

@@ -15,6 +15,20 @@ from .data.bank import SEED_QUESTIONS
 MAX_IMPORT_BYTES = 10 * 1024 * 1024
 MAX_IMPORTED_QUESTIONS = 5_000
 LETTERS = "ABCD"
+APTITUDE_MEMORY_TIPS = {
+    "Numbers and Basic Operations": "Estimate first, calculate carefully, then use the inverse operation to check.",
+    "Percentages": "10% is ÷10; 5% is half of 10%; 1% is ÷100.",
+    "Profit and Loss": "Find the difference first; percentage is measured against cost price.",
+    "Simple Interest": "P-R-T, then divide by 100: Principal × Rate × Time ÷ 100.",
+    "Ratio and Proportion": "Add parts → find one part → multiply by the part you need.",
+    "Time, Speed and Distance": "D-S-T: distance = speed × time; divide to find speed or time.",
+    "Time and Work": "Convert each worker to a one-day rate, then add the rates.",
+    "Average": "Average × count = total; total ÷ count = average.",
+    "Number Series": "Check the gaps first; if they change, compare how the gaps change.",
+    "Mensuration": "Write the shape's formula before substituting the measurements.",
+    "Coding and Decoding": "Track one letter at a time and check whether the shift repeats.",
+    "Classification and Odd One Out": "Test one clear property—square, factor, parity or category—across every choice.",
+}
 
 
 class QuestionPackError(ValueError):
@@ -79,6 +93,9 @@ def normalize_question(raw: dict[str, Any], *, fallback_id: str | None = None) -
     explanation = str(raw.get("explanation", raw.get("feedback", ""))).strip()
     if len(explanation) > 4_000:
         raise QuestionPackError("Explanation must be 4,000 characters or fewer.")
+    mnemonic = str(raw.get("mnemonic", "")).strip()
+    if len(mnemonic) > 800:
+        raise QuestionPackError("Memory hook must be 800 characters or fewer.")
     source_hint = str(raw.get("source_hint", raw.get("source", ""))).strip()
     if domain == "current_affairs" and not source_hint:
         raise QuestionPackError("Current-affairs questions need a source_hint with a publisher and publication date.")
@@ -96,6 +113,7 @@ def normalize_question(raw: dict[str, Any], *, fallback_id: str | None = None) -
         "options": {letter: option for letter, option in zip(LETTERS, options)},
         "answer": LETTERS[answer_index],
         "explanation": explanation,
+        "mnemonic": mnemonic,
         "difficulty": difficulty,
         "source_hint": source_hint[:300],
     }
@@ -169,6 +187,7 @@ def _generated(
     explanation: str,
     rng: random.Random,
     difficulty: int = 3,
+    mnemonic: str = "",
 ) -> dict[str, Any]:
     options = [str(answer), *(str(value) for value in distractors)]
     unique = []
@@ -192,6 +211,7 @@ def _generated(
         "options": {letter: option for letter, option in zip(LETTERS, values)},
         "answer": LETTERS[values.index(str(answer))],
         "explanation": explanation,
+        "mnemonic": mnemonic,
         "difficulty": difficulty,
         "source_hint": "Generated practice problem; review the worked explanation.",
     }
@@ -219,6 +239,7 @@ def generate_aptitude_questions(
             explanation,
             rng,
             level,
+            APTITUDE_MEMORY_TIPS.get(topic, ""),
         ))
 
     for _ in range(per_topic):

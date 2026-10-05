@@ -6,7 +6,7 @@ so dated facts are not presented as current.
 """
 
 
-def q(qid, domain, topic, question, answer, distractors, explanation, difficulty=4, source_hint=""):
+def q(qid, domain, topic, question, answer, distractors, explanation, difficulty=4, source_hint="", mnemonic=""):
     options = [answer, *distractors]
     if len(options) != 4 or len(set(options)) != 4:
         raise ValueError(f"Question {qid} must have four unique choices")
@@ -18,6 +18,7 @@ def q(qid, domain, topic, question, answer, distractors, explanation, difficulty
         "options": {letter: option for letter, option in zip("ABCD", options)},
         "answer": "A",
         "explanation": explanation,
+        "mnemonic": mnemonic,
         "difficulty": difficulty,
         "source_hint": source_hint,
     }
@@ -114,14 +115,14 @@ SEED_QUESTIONS = (
 
     # Quantitative aptitude and mental ability: fixed worked examples.
     q("math-001", "quantitative", "Number Series", "What is the next number in the series 3, 6, 12, 24, ___?", "48", ["36", "42", "54"], "Each term is doubled: 24 × 2 = 48."),
-    q("math-002", "quantitative", "Analogy", "Complete the number analogy: 3 is to 9 as 5 is to ___.", "25", ["10", "15", "20"], "The first number is squared: 3² = 9, so 5² = 25."),
+    q("math-002", "quantitative", "Analogy", "Complete the number analogy: 3 is to 9 as 5 is to ___.", "25", ["10", "15", "20"], "The first number is squared: 3² = 9, so 5² = 25.", mnemonic="Look for the same operation on both sides: 3 × 3, then 5 × 5."),
     q("math-003", "quantitative", "Family Relations", "Maya is Nikhil's sister. Nikhil is Anu's father. How is Maya related to Anu?", "Paternal aunt", ["Maternal aunt", "Cousin", "Grandmother"], "Maya is the sister of Anu's father, so Maya is Anu's paternal aunt."),
     q("math-004", "quantitative", "Sense of Direction", "A person faces north, turns right, then turns right again. Which direction are they facing?", "South", ["East", "West", "North"], "A right turn from north faces east; a second right turn faces south."),
     q("math-005", "quantitative", "Time and Angles", "What is the smaller angle between the clock hands at exactly 3 o'clock?", "90 degrees", ["45 degrees", "120 degrees", "180 degrees"], "At 3:00 the minute hand is at 12 and the hour hand at 3; the smaller angle is one quarter turn, or 90 degrees."),
-    q("math-006", "quantitative", "Position and Ranking", "In a row, Ravi is 8th from the left and 10th from the right. How many people are in the row?", "17", ["16", "18", "19"], "Total people = position from left + position from right − 1 = 8 + 10 − 1 = 17."),
-    q("math-007", "quantitative", "Calendar", "If today is Monday, what day of the week will it be 10 days later?", "Thursday", ["Tuesday", "Wednesday", "Friday"], "Ten days is one week plus three days. Three days after Monday is Thursday."),
+    q("math-006", "quantitative", "Position and Ranking", "In a row, Ravi is 8th from the left and 10th from the right. How many people are in the row?", "17", ["16", "18", "19"], "Total people = position from left + position from right − 1 = 8 + 10 − 1 = 17.", mnemonic="L + R − 1: the person in the middle was counted from both ends."),
+    q("math-007", "quantitative", "Calendar", "If today is Monday, what day of the week will it be 10 days later?", "Thursday", ["Tuesday", "Wednesday", "Friday"], "Ten days is one week plus three days. Three days after Monday is Thursday.", mnemonic="For weekday questions, remove full groups of 7 first; only count the remainder."),
     q("math-008", "quantitative", "Clerical Ability", "Which name comes first in alphabetical order?", "Anil", ["Arun", "Biju", "Meera"], "Compare the first letters: A comes before B and M; among Anil and Arun, 'n' comes before 'r'."),
-    q("math-009", "quantitative", "Fractions", "What is 3/4 of 80?", "60", ["20", "40", "64"], "Divide 80 by 4 to get 20, then multiply by 3: 20 × 3 = 60."),
+    q("math-009", "quantitative", "Fractions", "What is 3/4 of 80?", "60", ["20", "40", "64"], "Divide 80 by 4 to get 20, then multiply by 3: 20 × 3 = 60.", mnemonic="For 'fraction of', divide by the bottom, then multiply by the top."),
 
     # Biology, health and environment.
     q("bio-001", "biology", "Nutrition", "Deficiency of vitamin C can cause which disease?", "Scurvy", ["Rickets", "Night blindness", "Beriberi"], "Vitamin C deficiency causes scurvy; citrus fruits and several vegetables are dietary sources."),

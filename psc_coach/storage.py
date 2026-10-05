@@ -22,6 +22,7 @@ def default_profile() -> dict[str, Any]:
             "track": "10th",
             "daily_goal_minutes": 45,
             "negative_marking": True,
+            "theme": "dark",
         },
         "stats": {
             "sessions": 0,
@@ -79,6 +80,8 @@ def normalize_profile(raw: Any) -> dict[str, Any]:
         profile["settings"]["daily_goal_minutes"] = 45
     if profile["settings"].get("track") not in {"10th", "plus_two", "degree"}:
         profile["settings"]["track"] = "10th"
+    if profile["settings"].get("theme") not in {"dark", "light"}:
+        profile["settings"]["theme"] = "dark"
     profile["settings"]["negative_marking"] = bool(profile["settings"].get("negative_marking", True))
     stats = profile["stats"]
     for key in ("sessions", "questions", "correct", "streak"):

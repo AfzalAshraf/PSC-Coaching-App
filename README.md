@@ -10,6 +10,8 @@ An offline-first desktop coach for Kerala PSC aspirants preparing for **LDC / 10
 - **Three exam tracks:** LDC / 10th Level, Plus Two Level, and Degree Level, with their mark-weighted practice blueprints.
 - **Subject and topic practice** across Kerala and Indian history, renaissance, geography, civics, economics, the Constitution, arts and literature, sports, biology, physics, chemistry, science and technology, computer basics, English, Malayalam, and aptitude.
 - **Fresh aptitude practice:** arithmetic and reasoning items are generated locally so different sessions have new numbers and no question repeats inside a session.
+- **Math Lab:** twelve step-by-step calculators (percentages, percentage change, averages, ratios, simple interest, profit/loss, speed-distance-time, time/work, discounts, HCF/LCM, rectangle mensuration and fractions) plus fresh mental-maths drills with worked solutions and memorable shortcuts.
+- **Dark-first interface:** the app opens in dark mode, with themed forms, tables, charts, scrolling and dropdowns. Switch to light mode from the top bar or Library & Settings; the choice is remembered on this device.
 - **Learn-as-you-go mode** reveals the answer and explanation after each response. **Timed mock mode** hides feedback until submission, includes a question map, timer, review flags and optional one-third negative marking.
 - **Automatic coaching loop:** weak subject scores feed an adaptive practice mix and a daily study checklist. Wrong and skipped answers become flashcards.
 - **Spaced review** schedules cards from recall ratings: Again, Hard, Good or Easy.
@@ -51,6 +53,7 @@ No `pip install` is needed to use the app. On a minimal Linux installation, inst
 3. Select **Learn as you go** or **Timed mock**, then pick the question count.
 4. Review the explanations. Your missed questions are saved as due flashcards.
 5. Check **Overview** for today's plan and **My Progress** for subject accuracy and trends.
+6. Open **Math Lab** for guided arithmetic, formula-based calculators, worked solutions and short memory cues.
 
 ## Current affairs and question packs
 
@@ -83,6 +86,7 @@ Question format:
       },
       "answer": "B",
       "explanation": "Explain the answer in clear language.",
+      "mnemonic": "Optional memory hook or acronym.",
       "source_hint": "Source URL or book; publication date for time-sensitive facts"
     }
   ]
@@ -143,7 +147,7 @@ python -m unittest discover -s tests -v
 
 ## Learning design
 
-The app uses retrieval practice, a steady daily plan and scheduled review rather than relying only on rereading. Missed items return as flashcards; the learner rates recall and the next review interval changes accordingly. Adaptive practice prioritises weaker subjects, while timed mocks preserve the selected syllabus blueprint as closely as the available question bank allows. Any missing or lighter section is called out instead of silently represented as official coverage.
+The app uses retrieval practice, a steady daily plan and scheduled review rather than relying only on rereading. Missed items return as flashcards; the learner rates recall and the next review interval changes accordingly. Short memory hooks are shown alongside selected explanations and carry into review cards; custom question packs may include their own mnemonic. Math Lab encourages an estimate first, a clear formula, step-by-step substitution and then a quick self-test. Adaptive practice prioritises weaker subjects, while timed mocks preserve the selected syllabus blueprint as closely as the available question bank allows. Any missing or lighter section is called out instead of silently represented as official coverage.
 
 ## Development notes
 

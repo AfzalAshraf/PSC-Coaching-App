@@ -82,12 +82,19 @@ class ProfileStorageTests(unittest.TestCase):
 
     def test_profile_normalization_clamps_bad_user_preferences(self):
         profile = normalize_profile({
-            "settings": {"track": "not-a-track", "daily_goal_minutes": 9999},
+            "settings": {"track": "not-a-track", "daily_goal_minutes": 9999, "theme": "ultraviolet"},
             "stats": {"questions": -12},
         })
         self.assertEqual(profile["settings"]["track"], "10th")
         self.assertEqual(profile["settings"]["daily_goal_minutes"], 240)
+        self.assertEqual(profile["settings"]["theme"], "dark")
         self.assertEqual(profile["stats"]["questions"], 0)
+
+    def test_theme_preference_is_saved_and_dark_is_the_new_default(self):
+        profile = default_profile()
+        self.assertEqual(profile["settings"]["theme"], "dark")
+        profile["settings"]["theme"] = "light"
+        self.assertEqual(normalize_profile(profile)["settings"]["theme"], "light")
 
     def test_default_profile_path_is_user_scoped(self):
         self.assertIn("psc", str(default_profile_path()).lower())

@@ -93,6 +93,7 @@ class CatalogueAndSelectionTests(unittest.TestCase):
             self.assertIn(question["answer"], question["options"])
             self.assertEqual(len(set(question["options"].values())), 4)
             self.assertTrue(question["explanation"])
+        self.assertTrue(all(question["mnemonic"] for question in first))
 
 
 class ScoringAndReviewTests(unittest.TestCase):
@@ -147,6 +148,16 @@ class ScoringAndReviewTests(unittest.TestCase):
         self.assertEqual(profile["stats"]["streak"], 2)
         profile, _ = update_after_session(profile, q, correct_answers, track_id="10th", elapsed_seconds=5, now=datetime(2025, 1, 5, 9))
         self.assertEqual(profile["stats"]["streak"], 1)
+
+    def test_memory_hook_is_retained_in_answer_review_and_flashcard(self):
+        question = dict(self.questions[0])
+        question["mnemonic"] = "Divide by the bottom, multiply by the top."
+        profile, result = update_after_session(
+            default_profile(), [question], {}, track_id="degree", elapsed_seconds=8,
+            now=datetime(2025, 4, 1, 9, 0, 0),
+        )
+        self.assertEqual(result["reviews"][0]["mnemonic"], question["mnemonic"])
+        self.assertEqual(profile["flashcards"][0]["mnemonic"], question["mnemonic"])
 
     def test_card_schedule_advances_and_again_is_due_soon(self):
         profile, _ = update_after_session(

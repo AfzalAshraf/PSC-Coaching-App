@@ -26,6 +26,7 @@ from .learning import (
     schedule_flashcard,
     weak_domains,
 )
+from .math_tools import answer_matches, generate_math_drill, solve_calculation
 from .questions import QuestionPackError, build_question_pool, load_question_pack
 from .storage import ProfileStore, default_profile
 
@@ -45,6 +46,10 @@ COLORS = {
     "accent": "#087f5b",
     "accent_dark": "#056448",
     "accent_light": "#e0f3eb",
+    "accent_text": "#ffffff",
+    "surface": "#ffffff",
+    "input": "#ffffff",
+    "soft_hover": "#dce9e2",
     "blue": "#2f69a8",
     "blue_light": "#e8f1fb",
     "gold": "#ae7600",
@@ -56,6 +61,49 @@ COLORS = {
     "white": "#ffffff",
 }
 
+DARK_COLORS = {
+    "bg": "#0d1512",
+    "panel": "#151f1b",
+    "panel_alt": "#202d27",
+    "ink": "#e8f0ec",
+    "muted": "#a4b4ad",
+    "muted_light": "#83958c",
+    "border": "#31413a",
+    "nav": "#09110e",
+    "nav_hover": "#1c382c",
+    "accent": "#31b981",
+    "accent_dark": "#55d9a1",
+    "accent_light": "#163629",
+    "accent_text": "#07130e",
+    "surface": "#151f1b",
+    "input": "#202d27",
+    "soft_hover": "#2a3a32",
+    "blue": "#80bbf4",
+    "blue_light": "#1c3449",
+    "gold": "#f0c35b",
+    "gold_light": "#392f19",
+    "red": "#f08b8b",
+    "red_light": "#3b2424",
+    "purple": "#c3a3fa",
+    "purple_light": "#302641",
+    "white": "#f4f7f5",
+}
+
+THEMES = {"light": COLORS, "dark": DARK_COLORS}
+MATH_CALCULATORS = {
+    "percent_of": ("Percentage of a number", (("rate", "Percentage (%)"), ("number", "Number"))),
+    "percent_change": ("Percentage increase or decrease", (("before", "Original value"), ("after", "New value"))),
+    "average": ("Average", (("numbers", "Numbers (separate with commas)"),)),
+    "ratio_share": ("Share an amount by ratio", (("first", "First ratio part"), ("second", "Second ratio part"), ("total", "Total amount"), ("share", "Find which share?"))),
+    "simple_interest": ("Simple interest", (("principal", "Principal (P)"), ("rate", "Annual rate (%)"), ("years", "Time (years)"))),
+    "profit_loss": ("Profit or loss percentage", (("cost", "Cost price"), ("selling", "Selling price"))),
+    "speed_distance_time": ("Speed, distance and time", (("distance", "Distance (km)"), ("speed", "Speed (km/h)"), ("time", "Time (hours)"))),
+    "time_work": ("Time and work together", (("days_a", "Worker A days alone"), ("days_b", "Worker B days alone"))),
+    "discount_price": ("Discount and sale price", (("marked_price", "Marked price"), ("discount_rate", "Discount (%)"))),
+    "hcf_lcm": ("HCF and LCM", (("first_number", "First whole number"), ("second_number", "Second whole number"))),
+    "rectangle": ("Rectangle area and perimeter", (("length", "Length"), ("width", "Width"))),
+    "fraction_percent": ("Fraction to percentage", (("numerator", "Numerator"), ("denominator", "Denominator"))),
+}
 FONT = "Segoe UI"
 
 
@@ -72,7 +120,8 @@ def _percent(value: float) -> str:
 class ScrollFrame(ttk.Frame):
     """A lightweight vertically scrollable frame built with Tkinter Canvas."""
 
-    def __init__(self, master: tk.Misc, *, background: str = COLORS["bg"]):
+    def __init__(self, master: tk.Misc, *, background: str | None = None):
+        background = background or COLORS["bg"]
         super().__init__(master, style="Page.TFrame")
         self.canvas = tk.Canvas(self, background=background, highlightthickness=0, borderwidth=0)
         self.scrollbar = ttk.Scrollbar(self, orient="vertical", command=self.canvas.yview)
@@ -107,6 +156,7 @@ class PSCCoachApp(tk.Tk):
     NAV_ITEMS = (
         ("home", "Overview"),
         ("practice", "Practice & Mocks"),
+        ("math", "Math Lab"),
         ("flashcards", "Flashcards"),
         ("progress", "My Progress"),
         ("settings", "Library & Settings"),
@@ -117,9 +167,11 @@ class PSCCoachApp(tk.Tk):
         self.title(APP_TITLE)
         self.geometry("1260x850")
         self.minsize(1020, 680)
-        self.configure(background=COLORS["bg"])
         self.store = store or ProfileStore()
         self.profile = self.store.load()
+        self.theme_name = self.profile["settings"].get("theme", "dark")
+        self.colors = THEMES.get(self.theme_name, DARK_COLORS)
+        self.configure(background=self.colors["bg"])
         self.current_track = self.profile["settings"].get("track", "10th")
         self.question_pool = build_question_pool(self.profile.get("custom_questions", []))
         self.current_page = "home"
@@ -147,47 +199,78 @@ class PSCCoachApp(tk.Tk):
             style.theme_use("clam")
         except tk.TclError:
             pass
-        style.configure("TFrame", background=COLORS["bg"])
-        style.configure("Page.TFrame", background=COLORS["bg"])
-        style.configure("TLabel", background=COLORS["bg"], foreground=COLORS["ink"], font=(FONT, 10))
-        style.configure("Muted.TLabel", background=COLORS["bg"], foreground=COLORS["muted"], font=(FONT, 9))
-        style.configure("TButton", font=(FONT, 10), padding=(12, 8))
+        style.configure("TFrame", background=self.colors["bg"])
+        style.configure("Page.TFrame", background=self.colors["bg"])
+        style.configure("TLabel", background=self.colors["bg"], foreground=self.colors["ink"], font=(FONT, 10))
+        style.configure("Muted.TLabel", background=self.colors["bg"], foreground=self.colors["muted"], font=(FONT, 9))
+        style.configure("TButton", background=self.colors["panel_alt"], foreground=self.colors["ink"], font=(FONT, 10), padding=(12, 8))
+        style.map("TButton", background=[("active", self.colors["soft_hover"])], foreground=[("disabled", self.colors["muted"])])
         style.configure(
-            "Accent.TButton", background=COLORS["accent"], foreground=COLORS["white"],
+            "Accent.TButton", background=self.colors["accent"], foreground=self.colors["accent_text"],
             borderwidth=0, font=(FONT, 10, "bold"), padding=(16, 10),
         )
-        style.map("Accent.TButton", background=[("active", COLORS["accent_dark"]), ("disabled", "#a9c9bb")])
+        style.map(
+            "Accent.TButton",
+            background=[("active", self.colors["accent_dark"]), ("disabled", self.colors["panel_alt"])],
+            foreground=[("disabled", self.colors["muted"])],
+        )
         style.configure(
-            "Soft.TButton", background=COLORS["panel_alt"], foreground=COLORS["ink"],
+            "Soft.TButton", background=self.colors["panel_alt"], foreground=self.colors["ink"],
             borderwidth=0, padding=(12, 8),
         )
-        style.map("Soft.TButton", background=[("active", "#dce9e2")])
+        style.map("Soft.TButton", background=[("active", self.colors["soft_hover"])], foreground=[("disabled", self.colors["muted"])])
         style.configure(
-            "Danger.TButton", background=COLORS["red_light"], foreground=COLORS["red"],
+            "Danger.TButton", background=self.colors["red_light"], foreground=self.colors["red"],
             borderwidth=0, padding=(12, 8),
         )
-        style.configure("TEntry", padding=7, fieldbackground=COLORS["white"])
-        style.configure("TCombobox", padding=7, fieldbackground=COLORS["white"])
-        style.map("TCombobox", fieldbackground=[("readonly", COLORS["white"])])
-        style.configure("Horizontal.TProgressbar", troughcolor=COLORS["panel_alt"], background=COLORS["accent"])
-        style.configure("Treeview", font=(FONT, 9), rowheight=30, background=COLORS["white"], fieldbackground=COLORS["white"])
-        style.configure("Treeview.Heading", font=(FONT, 9, "bold"), background=COLORS["panel_alt"])
+        style.map("Danger.TButton", background=[("active", self.colors["red_light"])])
+        style.configure("TEntry", padding=7, fieldbackground=self.colors["input"], foreground=self.colors["ink"], bordercolor=self.colors["border"])
+        style.configure(
+            "TCombobox", padding=7, fieldbackground=self.colors["input"], foreground=self.colors["ink"],
+            background=self.colors["panel_alt"], arrowcolor=self.colors["ink"], selectbackground=self.colors["accent"],
+            selectforeground=self.colors["accent_text"], bordercolor=self.colors["border"],
+        )
+        style.map(
+            "TCombobox",
+            fieldbackground=[("readonly", self.colors["input"]), ("disabled", self.colors["panel_alt"])],
+            foreground=[("readonly", self.colors["ink"]), ("disabled", self.colors["muted"])],
+        )
+        style.configure("TCheckbutton", background=self.colors["bg"], foreground=self.colors["ink"], font=(FONT, 9))
+        style.map("TCheckbutton", background=[("active", self.colors["bg"])], foreground=[("disabled", self.colors["muted"])])
+        style.configure("Panel.TCheckbutton", background=self.colors["panel"], foreground=self.colors["ink"], font=(FONT, 9))
+        style.map("Panel.TCheckbutton", background=[("active", self.colors["panel"])], foreground=[("disabled", self.colors["muted"])])
+        style.configure("TRadiobutton", background=self.colors["panel"], foreground=self.colors["ink"], font=(FONT, 9))
+        style.map("TRadiobutton", background=[("active", self.colors["panel"])], foreground=[("disabled", self.colors["muted"])])
+        style.configure("Horizontal.TProgressbar", troughcolor=self.colors["panel_alt"], background=self.colors["accent"], bordercolor=self.colors["border"])
+        style.configure("Treeview", font=(FONT, 9), rowheight=30, background=self.colors["input"], fieldbackground=self.colors["input"], foreground=self.colors["ink"], bordercolor=self.colors["border"])
+        style.map("Treeview", background=[("selected", self.colors["accent"])], foreground=[("selected", self.colors["accent_text"])])
+        style.configure("Treeview.Heading", font=(FONT, 9, "bold"), background=self.colors["panel_alt"], foreground=self.colors["ink"])
+        style.map("Treeview.Heading", background=[("active", self.colors["soft_hover"])])
+        style.configure("TScrollbar", background=self.colors["panel_alt"], troughcolor=self.colors["bg"], arrowcolor=self.colors["muted"], bordercolor=self.colors["border"], lightcolor=self.colors["panel_alt"], darkcolor=self.colors["panel_alt"])
+        style.map("TScrollbar", background=[("active", self.colors["soft_hover"])])
+        style.configure("TSeparator", background=self.colors["border"])
+        self.option_add("*Listbox.background", self.colors["input"])
+        self.option_add("*Listbox.foreground", self.colors["ink"])
+        self.option_add("*Listbox.selectBackground", self.colors["accent"])
+        self.option_add("*Listbox.selectForeground", self.colors["accent_text"])
+        self.option_add("*TCombobox*Listbox.background", self.colors["input"])
+        self.option_add("*TCombobox*Listbox.foreground", self.colors["ink"])
 
     def _build_shell(self) -> None:
-        self.sidebar = tk.Frame(self, background=COLORS["nav"], width=224)
+        self.sidebar = tk.Frame(self, background=self.colors["nav"], width=224)
         self.sidebar.pack(side="left", fill="y")
         self.sidebar.pack_propagate(False)
 
-        brand = tk.Frame(self.sidebar, background=COLORS["nav"])
+        brand = tk.Frame(self.sidebar, background=self.colors["nav"])
         brand.pack(fill="x", padx=22, pady=(27, 29))
-        tk.Label(brand, text="PSC", font=(FONT, 11, "bold"), fg=COLORS["nav"], bg="#8fe1be", padx=8, pady=5).pack(side="left")
-        tk.Label(brand, text="  COACH", font=(FONT, 16, "bold"), fg=COLORS["white"], bg=COLORS["nav"]).pack(side="left")
+        tk.Label(brand, text="PSC", font=(FONT, 11, "bold"), fg=self.colors["nav"], bg="#8fe1be", padx=8, pady=5).pack(side="left")
+        tk.Label(brand, text="  COACH", font=(FONT, 16, "bold"), fg=self.colors["white"], bg=self.colors["nav"]).pack(side="left")
         tk.Label(
             self.sidebar,
             text="YOUR PREPARATION",
             font=(FONT, 8, "bold"),
             fg="#82a397",
-            bg=COLORS["nav"],
+            bg=self.colors["nav"],
             anchor="w",
         ).pack(fill="x", padx=22, pady=(0, 10))
 
@@ -203,15 +286,15 @@ class PSCCoachApp(tk.Tk):
                 pady=12,
                 font=(FONT, 10, "bold"),
                 fg="#c7d9d1",
-                bg=COLORS["nav"],
-                activeforeground=COLORS["white"],
-                activebackground=COLORS["nav_hover"],
+                bg=self.colors["nav"],
+                activeforeground=self.colors["white"],
+                activebackground=self.colors["nav_hover"],
                 cursor="hand2",
             )
             button.pack(fill="x", padx=10, pady=2)
             self._nav_buttons[page] = button
 
-        spacer = tk.Frame(self.sidebar, background=COLORS["nav"])
+        spacer = tk.Frame(self.sidebar, background=self.colors["nav"])
         spacer.pack(fill="both", expand=True)
         tk.Frame(self.sidebar, height=1, bg="#315148").pack(fill="x", padx=20, pady=(0, 12))
         tk.Label(
@@ -220,29 +303,60 @@ class PSCCoachApp(tk.Tk):
             justify="left",
             font=(FONT, 8),
             fg="#91a99f",
-            bg=COLORS["nav"],
+            bg=self.colors["nav"],
         ).pack(anchor="w", padx=22, pady=(0, 7))
-        tk.Label(self.sidebar, text=f"Version {APP_VERSION}", font=(FONT, 8), fg="#70877e", bg=COLORS["nav"]).pack(anchor="w", padx=22, pady=(0, 18))
+        tk.Label(self.sidebar, text=f"Version {APP_VERSION}", font=(FONT, 8), fg="#70877e", bg=self.colors["nav"]).pack(anchor="w", padx=22, pady=(0, 18))
 
-        self.work_area = tk.Frame(self, background=COLORS["bg"])
+        self.work_area = tk.Frame(self, background=self.colors["bg"])
         self.work_area.pack(side="left", fill="both", expand=True)
-        topbar = tk.Frame(self.work_area, background=COLORS["white"], height=64, highlightbackground=COLORS["border"], highlightthickness=1)
+        topbar = tk.Frame(self.work_area, background=self.colors["surface"], height=64, highlightbackground=self.colors["border"], highlightthickness=1)
         topbar.pack(fill="x")
         topbar.pack_propagate(False)
         self.page_title_var = tk.StringVar(value="Overview")
-        tk.Label(topbar, textvariable=self.page_title_var, font=(FONT, 13, "bold"), fg=COLORS["ink"], bg=COLORS["white"]).pack(side="left", padx=25)
+        tk.Label(topbar, textvariable=self.page_title_var, font=(FONT, 13, "bold"), fg=self.colors["ink"], bg=self.colors["surface"]).pack(side="left", padx=25)
+        self.theme_switch_button = ttk.Button(
+            topbar,
+            text="Light mode" if self.theme_name == "dark" else "Dark mode",
+            command=self._toggle_theme,
+            style="Soft.TButton",
+        )
+        self.theme_switch_button.pack(side="right", padx=(0, 15))
         self.local_tag = tk.Label(
             topbar,
             text="OFFLINE-FIRST  ·  YOUR DATA STAYS LOCAL",
             font=(FONT, 8, "bold"),
-            fg=COLORS["accent"],
-            bg=COLORS["accent_light"],
+            fg=self.colors["accent"],
+            bg=self.colors["accent_light"],
             padx=10,
             pady=6,
         )
-        self.local_tag.pack(side="right", padx=23)
+        self.local_tag.pack(side="right", padx=(0, 12))
         self._page_host = ttk.Frame(self.work_area)
         self._page_host.pack(fill="both", expand=True)
+
+    def _toggle_theme(self) -> None:
+        self._set_theme("light" if self.theme_name == "dark" else "dark")
+
+    def _set_theme(self, theme: str) -> None:
+        """Apply a saved palette and rebuild every widget in the current page."""
+        if theme not in THEMES:
+            theme = "dark"
+        if theme == self.theme_name:
+            return
+        self.theme_name = theme
+        self.colors = THEMES[theme]
+        self.profile["settings"]["theme"] = theme
+        self._save_profile(quiet=True)
+        self.configure(background=self.colors["bg"])
+        self._configure_styles()
+        if self._page_host is None:
+            return
+        for child in self.winfo_children():
+            child.destroy()
+        self._page_host = None
+        self._nav_buttons = {}
+        self._build_shell()
+        self.show_page(self.current_page)
 
     def _save_profile(self, *, quiet: bool = False) -> bool:
         try:
@@ -261,12 +375,13 @@ class PSCCoachApp(tk.Tk):
     def _new_scroll_page(self) -> tk.Frame:
         self._clear_page()
         assert self._page_host is not None
-        scroll = ScrollFrame(self._page_host)
+        scroll = ScrollFrame(self._page_host, background=self.colors["bg"])
         scroll.pack(fill="both", expand=True)
         return scroll.inner
 
-    def _card(self, parent: tk.Misc, *, background: str = COLORS["panel"], padding: int = 18) -> tk.Frame:
-        outer = tk.Frame(parent, bg=background, highlightbackground=COLORS["border"], highlightthickness=1)
+    def _card(self, parent: tk.Misc, *, background: str | None = None, padding: int = 18) -> tk.Frame:
+        background = background or self.colors["panel"]
+        outer = tk.Frame(parent, bg=background, highlightbackground=self.colors["border"], highlightthickness=1)
         inner = tk.Frame(outer, bg=background)
         inner.pack(fill="both", expand=True, padx=padding, pady=padding)
         outer.content = inner  # type: ignore[attr-defined]
@@ -279,12 +394,14 @@ class PSCCoachApp(tk.Tk):
         *,
         size: int = 10,
         bold: bool = False,
-        color: str = COLORS["ink"],
-        background: str = COLORS["bg"],
+        color: str | None = None,
+        background: str | None = None,
         wrap: int = 0,
         justify: str = "left",
         **kwargs: Any,
     ) -> tk.Label:
+        color = color or self.colors["ink"]
+        background = background or self.colors["bg"]
         return tk.Label(
             parent,
             text=text,
@@ -304,12 +421,12 @@ class PSCCoachApp(tk.Tk):
 
     def _heading(self, parent: tk.Misc, title: str, subtitle: str = "") -> None:
         # A dedicated header row keeps page-level geometry on grid consistently.
-        header = tk.Frame(parent, bg=COLORS["bg"])
+        header = tk.Frame(parent, bg=self.colors["bg"])
         header.grid(row=0, column=0, columnspan=2, sticky="ew", pady=(4, 15))
         header.grid_columnconfigure(0, weight=1)
         self._label(header, title, size=22, bold=True).pack(anchor="w", pady=(0, 2))
         if subtitle:
-            self._label(header, subtitle, size=10, color=COLORS["muted"], wrap=840).pack(anchor="w")
+            self._label(header, subtitle, size=10, color=self.colors["muted"], wrap=840).pack(anchor="w")
 
     def show_page(self, page: str) -> None:
         if page not in {item[0] for item in self.NAV_ITEMS} and page not in {"quiz", "results"}:
@@ -322,12 +439,13 @@ class PSCCoachApp(tk.Tk):
         active_nav = page if page in self._nav_buttons else "practice"
         for key, button in self._nav_buttons.items():
             button.configure(
-                bg=COLORS["nav_hover"] if key == active_nav else COLORS["nav"],
-                fg=COLORS["white"] if key == active_nav else "#c7d9d1",
+                bg=self.colors["nav_hover"] if key == active_nav else self.colors["nav"],
+                fg=self.colors["white"] if key == active_nav else "#c7d9d1",
             )
         renderers = {
             "home": self._render_home,
             "practice": self._render_practice,
+            "math": self._render_math_lab,
             "flashcards": self._render_flashcards,
             "progress": self._render_progress,
             "settings": self._render_settings,
@@ -365,31 +483,31 @@ class PSCCoachApp(tk.Tk):
         track = TRACKS[self.current_track]
         self._heading(page, "A smarter path to your next PSC exam", "Study by syllabus, practise under pressure, and turn each mistake into a planned review.")
 
-        hero = tk.Frame(page, bg=COLORS["nav"], padx=23, pady=21)
+        hero = tk.Frame(page, bg=self.colors["nav"], padx=23, pady=21)
         hero.grid(row=1, column=0, columnspan=2, sticky="ew", pady=(0, 16))
         hero.grid_columnconfigure(0, weight=1)
-        left = tk.Frame(hero, bg=COLORS["nav"])
+        left = tk.Frame(hero, bg=self.colors["nav"])
         left.grid(row=0, column=0, sticky="w")
-        self._label(left, f"CURRENT TRACK  ·  {track.short_name.upper()}", size=8, bold=True, color="#9cd9bf", background=COLORS["nav"]).pack(anchor="w")
-        self._label(left, track.description, size=13, bold=True, color=COLORS["white"], background=COLORS["nav"], wrap=650).pack(anchor="w", pady=(7, 0))
-        right = tk.Frame(hero, bg=COLORS["nav"])
+        self._label(left, f"CURRENT TRACK  ·  {track.short_name.upper()}", size=8, bold=True, color="#9cd9bf", background=self.colors["nav"]).pack(anchor="w")
+        self._label(left, track.description, size=13, bold=True, color=self.colors["white"], background=self.colors["nav"], wrap=650).pack(anchor="w", pady=(7, 0))
+        right = tk.Frame(hero, bg=self.colors["nav"])
         right.grid(row=0, column=1, sticky="e", padx=(20, 0))
         self._button(right, "Start a 10-question practice", lambda: self._start_session(count=10, mode="practice"), primary=True).pack(anchor="e", pady=(0, 7))
         self._button(right, "Build a timed mock", lambda: self.show_page("practice"), compact=True).pack(anchor="e")
 
-        track_row = tk.Frame(page, bg=COLORS["bg"])
+        track_row = tk.Frame(page, bg=self.colors["bg"])
         track_row.grid(row=2, column=0, columnspan=2, sticky="ew", pady=(0, 16))
         self._label(track_row, "Prepare for", size=9, bold=True).pack(side="left", padx=(0, 10))
         self._track_selector(track_row, width=34).pack(side="left")
-        self._label(track_row, "Mark splits are syllabus guides. Check your post notification for final details.", size=9, color=COLORS["muted"]).pack(side="left", padx=12)
+        self._label(track_row, "Mark splits are syllabus guides. Check your post notification for final details.", size=9, color=self.colors["muted"]).pack(side="left", padx=12)
 
         metric_values = [
-            ("AVERAGE ACCURACY", _percent(accuracy), "Across all saved attempts", COLORS["accent"]),
-            ("QUESTIONS SOLVED", f"{total:,}", f"{stats.get('sessions', 0)} practice sessions", COLORS["blue"]),
-            ("STUDY STREAK", f"{stats.get('streak', 0)} days", "Consecutive active study days", COLORS["gold"]),
-            ("CARDS DUE", str(due), "Recall practice ready now", COLORS["purple"]),
+            ("AVERAGE ACCURACY", _percent(accuracy), "Across all saved attempts", self.colors["accent"]),
+            ("QUESTIONS SOLVED", f"{total:,}", f"{stats.get('sessions', 0)} practice sessions", self.colors["blue"]),
+            ("STUDY STREAK", f"{stats.get('streak', 0)} days", "Consecutive active study days", self.colors["gold"]),
+            ("CARDS DUE", str(due), "Recall practice ready now", self.colors["purple"]),
         ]
-        metric_frame = tk.Frame(page, bg=COLORS["bg"])
+        metric_frame = tk.Frame(page, bg=self.colors["bg"])
         metric_frame.grid(row=3, column=0, columnspan=2, sticky="ew", pady=(0, 16))
         for column in range(4):
             metric_frame.grid_columnconfigure(column, weight=1, uniform="metric")
@@ -397,27 +515,27 @@ class PSCCoachApp(tk.Tk):
             card = self._card(metric_frame, padding=15)
             card.grid(row=0, column=column, sticky="nsew", padx=(0 if column == 0 else 6, 0 if column == 3 else 6))
             content = card.content  # type: ignore[attr-defined]
-            self._label(content, title, size=8, bold=True, color=COLORS["muted"], background=COLORS["panel"]).pack(anchor="w")
-            self._label(content, value, size=22, bold=True, color=color, background=COLORS["panel"]).pack(anchor="w", pady=(8, 2))
-            self._label(content, detail, size=8, color=COLORS["muted"], background=COLORS["panel"], wrap=190).pack(anchor="w")
+            self._label(content, title, size=8, bold=True, color=self.colors["muted"], background=self.colors["panel"]).pack(anchor="w")
+            self._label(content, value, size=22, bold=True, color=color, background=self.colors["panel"]).pack(anchor="w", pady=(8, 2))
+            self._label(content, detail, size=8, color=self.colors["muted"], background=self.colors["panel"], wrap=190).pack(anchor="w")
 
         plan_card = self._card(page, padding=18)
         plan_card.grid(row=4, column=0, sticky="nsew", padx=(0, 7), pady=(0, 16))
         plan = daily_plan(self.profile, self.current_track)
         checks = task_completion(self.profile)
         plan_content = plan_card.content  # type: ignore[attr-defined]
-        title_row = tk.Frame(plan_content, bg=COLORS["panel"])
+        title_row = tk.Frame(plan_content, bg=self.colors["panel"])
         title_row.pack(fill="x")
-        self._label(title_row, "Today's study plan", size=14, bold=True, background=COLORS["panel"]).pack(side="left")
-        self._label(title_row, f"{settings.get('daily_goal_minutes', 45)} min goal", size=9, bold=True, color=COLORS["accent"], background=COLORS["accent_light"], padx=9, pady=4).pack(side="right")
-        self._label(plan_content, "Small, focused blocks beat last-minute cramming.", size=9, color=COLORS["muted"], background=COLORS["panel"]).pack(anchor="w", pady=(4, 10))
+        self._label(title_row, "Today's study plan", size=14, bold=True, background=self.colors["panel"]).pack(side="left")
+        self._label(title_row, f"{settings.get('daily_goal_minutes', 45)} min goal", size=9, bold=True, color=self.colors["accent"], background=self.colors["accent_light"], padx=9, pady=4).pack(side="right")
+        self._label(plan_content, "Small, focused blocks beat last-minute cramming.", size=9, color=self.colors["muted"], background=self.colors["panel"]).pack(anchor="w", pady=(4, 10))
         plan_vars: dict[str, tk.BooleanVar] = {}
         plan_bar = ttk.Progressbar(plan_content, maximum=sum(task["minutes"] for task in plan), mode="determinate")
         plan_bar.pack(fill="x", pady=(0, 7))
-        plan_progress = self._label(plan_content, "", size=8, color=COLORS["muted"], background=COLORS["panel"])
+        plan_progress = self._label(plan_content, "", size=8, color=self.colors["muted"], background=self.colors["panel"])
         plan_progress.pack(anchor="w", pady=(0, 5))
         for task in plan:
-            row = tk.Frame(plan_content, bg=COLORS["panel"])
+            row = tk.Frame(plan_content, bg=self.colors["panel"])
             row.pack(fill="x", pady=5)
             variable = tk.BooleanVar(value=checks.get(task["id"], False))
             plan_vars[task["id"]] = variable
@@ -425,46 +543,46 @@ class PSCCoachApp(tk.Tk):
                 row,
                 variable=variable,
                 command=lambda item=task, state=variable: self._complete_plan_task(item, state, plan, plan_vars, plan_bar, plan_progress),
-                bg=COLORS["panel"],
-                activebackground=COLORS["panel"],
-                fg=COLORS["accent"],
-                selectcolor=COLORS["panel"],
+                bg=self.colors["panel"],
+                activebackground=self.colors["panel"],
+                fg=self.colors["accent"],
+                selectcolor=self.colors["panel"],
                 relief="flat",
                 bd=0,
                 cursor="hand2",
             )
             check.pack(side="left", anchor="n", padx=(0, 5))
-            task_text = tk.Frame(row, bg=COLORS["panel"])
+            task_text = tk.Frame(row, bg=self.colors["panel"])
             task_text.pack(side="left", fill="x", expand=True)
-            self._label(task_text, task["title"], size=10, bold=True, background=COLORS["panel"]).pack(anchor="w")
-            self._label(task_text, task["detail"], size=8, color=COLORS["muted"], background=COLORS["panel"], wrap=330).pack(anchor="w", pady=(2, 0))
-            self._label(row, f"{task['minutes']}m", size=9, bold=True, color=COLORS["muted"], background=COLORS["panel"]).pack(side="right", padx=(6, 0))
+            self._label(task_text, task["title"], size=10, bold=True, background=self.colors["panel"]).pack(anchor="w")
+            self._label(task_text, task["detail"], size=8, color=self.colors["muted"], background=self.colors["panel"], wrap=330).pack(anchor="w", pady=(2, 0))
+            self._label(row, f"{task['minutes']}m", size=9, bold=True, color=self.colors["muted"], background=self.colors["panel"]).pack(side="right", padx=(6, 0))
             self._button(row, "Open", lambda item=task: self._run_plan_task(item), compact=True).pack(side="right", padx=(4, 0))
         self._refresh_plan_progress(plan, plan_vars, plan_bar, plan_progress)
 
         focus_card = self._card(page, padding=18)
         focus_card.grid(row=4, column=1, sticky="nsew", padx=(7, 0), pady=(0, 16))
         focus_content = focus_card.content  # type: ignore[attr-defined]
-        self._label(focus_content, "Focus on what will move your score", size=14, bold=True, background=COLORS["panel"]).pack(anchor="w")
-        self._label(focus_content, "Your own attempts decide this ranking. New learners see a balanced syllabus mix.", size=9, color=COLORS["muted"], background=COLORS["panel"], wrap=470).pack(anchor="w", pady=(4, 10))
+        self._label(focus_content, "Focus on what will move your score", size=14, bold=True, background=self.colors["panel"]).pack(anchor="w")
+        self._label(focus_content, "Your own attempts decide this ranking. New learners see a balanced syllabus mix.", size=9, color=self.colors["muted"], background=self.colors["panel"], wrap=470).pack(anchor="w", pady=(4, 10))
         weak = weak_domains(self.profile)
         if weak:
             for domain, pct, count in weak[:4]:
-                self._accuracy_row(focus_content, DOMAIN_LABELS.get(domain, domain), pct, f"{count} questions", parent_bg=COLORS["panel"])
+                self._accuracy_row(focus_content, DOMAIN_LABELS.get(domain, domain), pct, f"{count} questions", parent_bg=self.colors["panel"])
         else:
-            self._label(focus_content, "After a few sessions, your lowest-scoring subjects will appear here.", size=10, color=COLORS["muted"], background=COLORS["panel"], wrap=460).pack(anchor="w", pady=10)
+            self._label(focus_content, "After a few sessions, your lowest-scoring subjects will appear here.", size=10, color=self.colors["muted"], background=self.colors["panel"], wrap=460).pack(anchor="w", pady=10)
             self._button(focus_content, "Choose a subject", lambda: self.show_page("practice")).pack(anchor="w", pady=(3, 0))
         self._label(page, "Blueprint for this track", size=13, bold=True).grid(row=5, column=0, columnspan=2, sticky="w", pady=(3, 8))
         blueprint = self._card(page, padding=15)
         blueprint.grid(row=6, column=0, columnspan=2, sticky="ew", pady=(0, 15))
         bcontent = blueprint.content  # type: ignore[attr-defined]
         for group, marks in track.weights.items():
-            row = tk.Frame(bcontent, bg=COLORS["panel"])
+            row = tk.Frame(bcontent, bg=self.colors["panel"])
             row.pack(fill="x", pady=3)
             label = track.bucket_labels.get(group, group.replace("_", " ").title())
-            self._label(row, label, size=9, background=COLORS["panel"]).pack(side="left")
-            self._label(row, f"{marks} / 100", size=9, bold=True, color=COLORS["accent"], background=COLORS["panel"]).pack(side="right")
-        self._label(page, "Live current-affairs facts are not bundled. Use verified official sources and import dated questions for current events.", size=9, color=COLORS["muted"], wrap=850).grid(row=7, column=0, columnspan=2, sticky="w", pady=(2, 20))
+            self._label(row, label, size=9, background=self.colors["panel"]).pack(side="left")
+            self._label(row, f"{marks} / 100", size=9, bold=True, color=self.colors["accent"], background=self.colors["panel"]).pack(side="right")
+        self._label(page, "Live current-affairs facts are not bundled. Use verified official sources and import dated questions for current events.", size=9, color=self.colors["muted"], wrap=850).grid(row=7, column=0, columnspan=2, sticky="w", pady=(2, 20))
 
     def _refresh_plan_progress(self, plan, variables, progress_bar, progress_label) -> None:
         total = sum(task["minutes"] for task in plan)
@@ -484,13 +602,14 @@ class PSCCoachApp(tk.Tk):
         elif action == "practice":
             self._start_session(count=10, mode="practice", domain=task.get("domain"))
 
-    def _accuracy_row(self, parent: tk.Misc, label: str, pct: float, detail: str, *, parent_bg: str = COLORS["white"]) -> None:
+    def _accuracy_row(self, parent: tk.Misc, label: str, pct: float, detail: str, *, parent_bg: str | None = None) -> None:
+        parent_bg = parent_bg or self.colors["panel"]
         row = tk.Frame(parent, bg=parent_bg)
         row.pack(fill="x", pady=5)
         head = tk.Frame(row, bg=parent_bg)
         head.pack(fill="x")
         self._label(head, label, size=9, bold=True, background=parent_bg).pack(side="left")
-        self._label(head, f"{_percent(pct)}  ·  {detail}", size=8, color=COLORS["muted"], background=parent_bg).pack(side="right")
+        self._label(head, f"{_percent(pct)}  ·  {detail}", size=8, color=self.colors["muted"], background=parent_bg).pack(side="right")
         bar = ttk.Progressbar(row, maximum=100, value=max(0, min(100, pct)), mode="determinate")
         bar.pack(fill="x", pady=(4, 0))
 
@@ -502,16 +621,16 @@ class PSCCoachApp(tk.Tk):
         setup = self._card(page, padding=20)
         setup.grid(row=1, column=0, sticky="ew", pady=(0, 15))
         content = setup.content  # type: ignore[attr-defined]
-        self._label(content, "Set up your session", size=15, bold=True, background=COLORS["panel"]).pack(anchor="w", pady=(0, 12))
-        fields = tk.Frame(content, bg=COLORS["panel"])
+        self._label(content, "Set up your session", size=15, bold=True, background=self.colors["panel"]).pack(anchor="w", pady=(0, 12))
+        fields = tk.Frame(content, bg=self.colors["panel"])
         fields.pack(fill="x")
         for column in range(4):
             fields.grid_columnconfigure(column, weight=1)
 
-        self._label(fields, "EXAM TRACK", size=8, bold=True, color=COLORS["muted"], background=COLORS["panel"]).grid(row=0, column=0, sticky="w", padx=(0, 10), pady=(0, 5))
-        self._label(fields, "SUBJECT", size=8, bold=True, color=COLORS["muted"], background=COLORS["panel"]).grid(row=0, column=1, sticky="w", padx=(0, 10), pady=(0, 5))
-        self._label(fields, "TOPIC", size=8, bold=True, color=COLORS["muted"], background=COLORS["panel"]).grid(row=0, column=2, sticky="w", padx=(0, 10), pady=(0, 5))
-        self._label(fields, "QUESTION COUNT", size=8, bold=True, color=COLORS["muted"], background=COLORS["panel"]).grid(row=0, column=3, sticky="w", pady=(0, 5))
+        self._label(fields, "EXAM TRACK", size=8, bold=True, color=self.colors["muted"], background=self.colors["panel"]).grid(row=0, column=0, sticky="w", padx=(0, 10), pady=(0, 5))
+        self._label(fields, "SUBJECT", size=8, bold=True, color=self.colors["muted"], background=self.colors["panel"]).grid(row=0, column=1, sticky="w", padx=(0, 10), pady=(0, 5))
+        self._label(fields, "TOPIC", size=8, bold=True, color=self.colors["muted"], background=self.colors["panel"]).grid(row=0, column=2, sticky="w", padx=(0, 10), pady=(0, 5))
+        self._label(fields, "QUESTION COUNT", size=8, bold=True, color=self.colors["muted"], background=self.colors["panel"]).grid(row=0, column=3, sticky="w", pady=(0, 5))
 
         self._practice_track_var = tk.StringVar(value=TRACKS[self.current_track].name)
         track_names = [track.name for track in TRACKS.values()]
@@ -532,33 +651,34 @@ class PSCCoachApp(tk.Tk):
         self._count_combo.grid(row=1, column=3, sticky="ew")
         self._populate_practice_domains(self.current_track)
 
-        lower = tk.Frame(content, bg=COLORS["panel"])
+        lower = tk.Frame(content, bg=self.colors["panel"])
         lower.pack(fill="x", pady=(17, 0))
-        mode_box = tk.Frame(lower, bg=COLORS["panel"])
+        mode_box = tk.Frame(lower, bg=self.colors["panel"])
         mode_box.pack(side="left", fill="x", expand=True)
-        self._label(mode_box, "SESSION MODE", size=8, bold=True, color=COLORS["muted"], background=COLORS["panel"]).pack(anchor="w", pady=(0, 5))
+        self._label(mode_box, "SESSION MODE", size=8, bold=True, color=self.colors["muted"], background=self.colors["panel"]).pack(anchor="w", pady=(0, 5))
         self._mode_var = tk.StringVar(value="practice")
         for value, text in (("practice", "Learn as you go"), ("mock", "Timed mock")):
             ttk.Radiobutton(mode_box, text=text, variable=self._mode_var, value=value).pack(side="left", padx=(0, 14))
         self._negative_var = tk.BooleanVar(value=bool(self.profile["settings"].get("negative_marking", True)))
-        ttk.Checkbutton(lower, text="Apply -1/3 per wrong answer in mock mode", variable=self._negative_var).pack(side="left", padx=14)
+        ttk.Checkbutton(lower, text="Apply -1/3 per wrong answer in mock mode", variable=self._negative_var, style="Panel.TCheckbutton").pack(side="left", padx=14)
         self._button(lower, "Start session", self._start_from_practice, primary=True).pack(side="right")
-        self._label(content, "A 100-question mock uses the selected blueprint. Shorter mocks use proportional sampling. Negative-marking rules vary by post; adjust this setting to match your notification.", size=9, color=COLORS["muted"], background=COLORS["panel"], wrap=900).pack(anchor="w", pady=(12, 0))
+        self._label(content, "A 100-question mock uses the selected blueprint. Shorter mocks use proportional sampling. Negative-marking rules vary by post; adjust this setting to match your notification.", size=9, color=self.colors["muted"], background=self.colors["panel"], wrap=900).pack(anchor="w", pady=(12, 0))
 
-        subject_title = tk.Frame(page, bg=COLORS["bg"])
+        subject_title = tk.Frame(page, bg=self.colors["bg"])
         subject_title.grid(row=2, column=0, sticky="ew", pady=(5, 8))
         self._label(subject_title, "Subject practice", size=15, bold=True).pack(side="left")
-        self._label(subject_title, f"{len(self.question_pool):,} local questions available", size=9, color=COLORS["muted"]).pack(side="right")
-        self._domain_grid = tk.Frame(page, bg=COLORS["bg"])
+        self._button(subject_title, "Open Math Lab", lambda: self.show_page("math"), compact=True).pack(side="right")
+        self._label(subject_title, f"{len(self.question_pool):,} local questions available", size=9, color=self.colors["muted"]).pack(side="right", padx=10)
+        self._domain_grid = tk.Frame(page, bg=self.colors["bg"])
         self._domain_grid.grid(row=3, column=0, sticky="ew", pady=(0, 18))
         self._render_domain_tiles(self.current_track)
 
         ca = self._card(page, padding=17)
         ca.grid(row=4, column=0, sticky="ew", pady=(0, 18))
         ca_content = ca.content  # type: ignore[attr-defined]
-        self._label(ca_content, "Current affairs: keep it current", size=13, bold=True, background=COLORS["panel"]).pack(anchor="w")
-        self._label(ca_content, "No stale headlines are built into the app. Use trusted official sources, then import a dated question pack so your mock reflects the right exam cycle.", size=9, color=COLORS["muted"], background=COLORS["panel"], wrap=900).pack(anchor="w", pady=(4, 10))
-        link_row = tk.Frame(ca_content, bg=COLORS["panel"])
+        self._label(ca_content, "Current affairs: keep it current", size=13, bold=True, background=self.colors["panel"]).pack(anchor="w")
+        self._label(ca_content, "No stale headlines are built into the app. Use trusted official sources, then import a dated question pack so your mock reflects the right exam cycle.", size=9, color=self.colors["muted"], background=self.colors["panel"], wrap=900).pack(anchor="w", pady=(4, 10))
+        link_row = tk.Frame(ca_content, bg=self.colors["panel"])
         link_row.pack(anchor="w")
         for label, url in CURRENT_AFFAIRS_SOURCES:
             self._button(link_row, label, lambda target=url: self._open_url(target), compact=True).pack(side="left", padx=(0, 6))
@@ -608,14 +728,244 @@ class PSCCoachApp(tk.Tk):
             card = self._card(self._domain_grid, padding=13)
             card.grid(row=row_index, column=column_index, sticky="nsew", padx=5, pady=5)
             content = card.content  # type: ignore[attr-defined]
-            self._label(content, DOMAIN_LABELS[domain], size=10, bold=True, background=COLORS["panel"], wrap=240).pack(anchor="w")
-            self._label(content, f"{count} ready question{'s' if count != 1 else ''}", size=8, color=COLORS["muted"], background=COLORS["panel"]).pack(anchor="w", pady=(4, 8))
+            self._label(content, DOMAIN_LABELS[domain], size=10, bold=True, background=self.colors["panel"], wrap=240).pack(anchor="w")
+            self._label(content, f"{count} ready question{'s' if count != 1 else ''}", size=8, color=self.colors["muted"], background=self.colors["panel"]).pack(anchor="w", pady=(4, 8))
             if count:
                 self._button(content, "Practise this subject", lambda selected=domain: self._start_session(count=min(10, sum(1 for q in self.question_pool if q["domain"] == selected)), mode="practice", domain=selected), compact=True).pack(anchor="w")
             elif domain == "current_affairs":
                 self._button(content, "Import dated questions", self._import_question_pack, compact=True).pack(anchor="w")
             else:
-                self._label(content, "Import a question pack to add items.", size=8, color=COLORS["muted"], background=COLORS["panel"]).pack(anchor="w")
+                self._label(content, "Import a question pack to add items.", size=8, color=self.colors["muted"], background=self.colors["panel"]).pack(anchor="w")
+
+    def _render_math_lab(self) -> None:
+        page = self._new_scroll_page()
+        page.grid_columnconfigure(0, weight=1)
+        self._heading(
+            page,
+            "Math Lab · make the steps feel simple",
+            "Practise one small problem at a time, see every step, and use the shortcut only after you understand why it works.",
+        )
+
+        if not hasattr(self, "_math_drill"):
+            self._math_drill = generate_math_drill()
+            self._math_drill_answer_var = tk.StringVar(value="")
+            self._math_drill_checked = False
+            self._math_drill_correct = False
+            self._math_drill_notice = ""
+        stats = self.profile["stats"]
+        attempts = int(stats.get("math_drill_attempts", 0) or 0)
+        correct = int(stats.get("math_drill_correct", 0) or 0)
+        streak = int(stats.get("math_drill_streak", 0) or 0)
+
+        drill_card = self._card(page, padding=20)
+        drill_card.grid(row=1, column=0, sticky="ew", pady=(0, 14))
+        drill = drill_card.content  # type: ignore[attr-defined]
+        header = tk.Frame(drill, bg=self.colors["panel"])
+        header.pack(fill="x")
+        self._label(header, "Quick mental-maths workout", size=15, bold=True, background=self.colors["panel"]).pack(side="left")
+        self._label(header, f"{correct}/{attempts} correct  ·  streak {streak}", size=9, color=self.colors["accent"], background=self.colors["panel"]).pack(side="right")
+        self._label(drill, f"{self._math_drill.topic}  ·  no timer, no pressure", size=9, color=self.colors["muted"], background=self.colors["panel"]).pack(anchor="w", pady=(5, 10))
+        prompt_panel = tk.Frame(drill, bg=self.colors["panel_alt"], padx=16, pady=15)
+        prompt_panel.pack(fill="x")
+        self._label(prompt_panel, self._math_drill.prompt, size=16, bold=True, background=self.colors["panel_alt"], wrap=900).pack(anchor="w")
+        self._label(prompt_panel, f"Memory hook: {self._math_drill.memory_tip}", size=9, color=self.colors["muted"], background=self.colors["panel_alt"], wrap=900).pack(anchor="w", pady=(8, 0))
+
+        answer_row = tk.Frame(drill, bg=self.colors["panel"])
+        answer_row.pack(fill="x", pady=(13, 0))
+        self._label(answer_row, "Your answer", size=9, bold=True, background=self.colors["panel"]).pack(side="left", padx=(0, 8))
+        entry = ttk.Entry(answer_row, textvariable=self._math_drill_answer_var, width=18, font=(FONT, 11))
+        entry.pack(side="left", padx=(0, 8))
+        entry.configure(state="disabled" if self._math_drill_checked else "normal")
+        entry.bind("<Return>", lambda _event: self._check_math_drill())
+        if self._math_drill_checked:
+            self._button(answer_row, "Try another", self._new_math_drill, primary=True).pack(side="left")
+        else:
+            self._button(answer_row, "Check my answer", self._check_math_drill, primary=True).pack(side="left")
+            self._label(answer_row, "Type the number; units and commas are optional.", size=8, color=self.colors["muted"], background=self.colors["panel"]).pack(side="left", padx=10)
+        if self._math_drill_notice:
+            self._label(drill, self._math_drill_notice, size=9, color=self.colors["red"], background=self.colors["panel"]).pack(anchor="w", pady=(8, 0))
+        if self._math_drill_checked:
+            feedback_bg = self.colors["accent_light"] if self._math_drill_correct else self.colors["red_light"]
+            feedback_fg = self.colors["accent_dark"] if self._math_drill_correct else self.colors["red"]
+            feedback = tk.Frame(drill, bg=feedback_bg, padx=14, pady=12)
+            feedback.pack(fill="x", pady=(13, 0))
+            response = "Correct — nice work." if self._math_drill_correct else f"Not quite. The answer is {self._math_drill.display_answer}. Learn the steps, then try another."
+            self._label(feedback, response, size=10, bold=True, color=feedback_fg, background=feedback_bg, wrap=900).pack(anchor="w")
+            for number, step in enumerate(self._math_drill.steps, start=1):
+                self._label(feedback, f"{number}. {step}", size=9, color=self.colors["ink"], background=feedback_bg, wrap=900).pack(anchor="w", pady=(6, 0))
+            self._label(feedback, f"Remember: {self._math_drill.memory_tip}", size=9, bold=True, color=feedback_fg, background=feedback_bg, wrap=900).pack(anchor="w", pady=(8, 0))
+        else:
+            self._label(drill, "First estimate, then solve. You will see the worked method after you check.", size=9, color=self.colors["muted"], background=self.colors["panel"]).pack(anchor="w", pady=(9, 0))
+
+        calculator_card = self._card(page, padding=20)
+        calculator_card.grid(row=2, column=0, sticky="ew", pady=(0, 14))
+        calculator = calculator_card.content  # type: ignore[attr-defined]
+        self._label(calculator, "Step-by-step calculators", size=15, bold=True, background=self.colors["panel"]).pack(anchor="w")
+        self._label(calculator, "Use these to check your working. The answer always includes the formula and substitution.", size=9, color=self.colors["muted"], background=self.colors["panel"]).pack(anchor="w", pady=(4, 11))
+        if not hasattr(self, "_math_calc_kind_var"):
+            self._math_calc_kind_var = tk.StringVar(value="percent_of")
+            self._math_calc_vars: dict[str, tk.StringVar] = {}
+            self._math_calc_share_var = tk.StringVar(value="second")
+            self._math_calc_target_var = tk.StringVar(value="distance")
+            self._math_calc_solution = None
+            self._math_calc_error = ""
+        kind = self._math_calc_kind_var.get()
+        if kind not in MATH_CALCULATORS:
+            self._math_calc_kind_var.set("percent_of")
+            kind = "percent_of"
+        selector_row = tk.Frame(calculator, bg=self.colors["panel"])
+        selector_row.pack(fill="x", pady=(0, 10))
+        self._label(selector_row, "Choose a tool", size=9, bold=True, background=self.colors["panel"]).pack(side="left", padx=(0, 9))
+        calculator_labels = [details[0] for details in MATH_CALCULATORS.values()]
+        selected_label = MATH_CALCULATORS[kind][0]
+        self._math_calc_choice_var = tk.StringVar(value=selected_label)
+        choice = ttk.Combobox(selector_row, textvariable=self._math_calc_choice_var, values=calculator_labels, state="readonly", width=34)
+        choice.pack(side="left")
+        choice.bind("<<ComboboxSelected>>", self._math_calculator_changed)
+
+        self._math_calc_fields_frame = tk.Frame(calculator, bg=self.colors["panel"])
+        self._math_calc_fields_frame.pack(fill="x")
+        self._build_math_calculator_fields()
+        calc_action = tk.Frame(calculator, bg=self.colors["panel"])
+        calc_action.pack(fill="x", pady=(13, 0))
+        self._button(calc_action, "Show steps", self._solve_math_calculation, primary=True).pack(side="left")
+        self._button(calc_action, "Clear inputs", self._clear_math_calculation, compact=True).pack(side="left", padx=8)
+        if self._math_calc_error:
+            self._label(calculator, self._math_calc_error, size=9, color=self.colors["red"], background=self.colors["panel"], wrap=900).pack(anchor="w", pady=(10, 0))
+        if self._math_calc_solution is not None:
+            solution = self._math_calc_solution
+            result_box = tk.Frame(calculator, bg=self.colors["accent_light"], padx=14, pady=12)
+            result_box.pack(fill="x", pady=(12, 0))
+            self._label(result_box, f"{solution.label}: {solution.display_value}", size=13, bold=True, color=self.colors["accent_dark"], background=self.colors["accent_light"]).pack(anchor="w")
+            for number, step in enumerate(solution.steps, start=1):
+                self._label(result_box, f"{number}. {step}", size=9, color=self.colors["ink"], background=self.colors["accent_light"], wrap=900).pack(anchor="w", pady=(5, 0))
+            self._label(result_box, f"Remember: {solution.memory_tip}", size=9, bold=True, color=self.colors["accent_dark"], background=self.colors["accent_light"], wrap=900).pack(anchor="w", pady=(8, 0))
+
+        self._label(page, "Remember it · small cues, big recall", size=15, bold=True).grid(row=3, column=0, sticky="w", pady=(5, 8))
+        memory_cards = (
+            ("BODMAS", "Brackets → Orders → Division and Multiplication → Addition and Subtraction. Work left to right when operations share a level."),
+            ("Percent shortcut", "10% = divide by 10. 5% = half of 10%. 1% = divide by 100. Combine these chunks for many exam percentages."),
+            ("Ratio recipe", "Add the parts → divide the total to find one part → multiply by the part you need."),
+            ("P-R-T", "Simple Interest = Principal × Rate × Time ÷ 100. Keep the time unit consistent with the rate."),
+            ("D-S-T", "Distance = Speed × Time. Cover the value you need: divide the other two when finding speed or time."),
+            ("Work rate", "One-day work = 1 ÷ days. Add workers’ daily rates, then invert the total rate to get time together."),
+            ("Area and perimeter", "Area fills the inside; perimeter measures the boundary around it. For a rectangle: A = length × width; P = 2 × (length + width)."),
+            ("Learn for longer", "Try to recall before looking, explain the idea in your own words, then revisit it after a gap. A short self-test beats rereading alone."),
+        )
+        memory_grid = tk.Frame(page, bg=self.colors["bg"])
+        memory_grid.grid(row=4, column=0, sticky="ew", pady=(0, 18))
+        for column in range(2):
+            memory_grid.grid_columnconfigure(column, weight=1, uniform="math_memory")
+        for index, (title, detail) in enumerate(memory_cards):
+            tile = self._card(memory_grid, padding=14)
+            tile.grid(row=index // 2, column=index % 2, sticky="nsew", padx=(0 if index % 2 == 0 else 6, 6 if index % 2 == 0 else 0), pady=5)
+            tile_content = tile.content  # type: ignore[attr-defined]
+            self._label(tile_content, title, size=10, bold=True, color=self.colors["accent"], background=self.colors["panel"]).pack(anchor="w")
+            self._label(tile_content, detail, size=9, color=self.colors["muted"], background=self.colors["panel"], wrap=440).pack(anchor="w", pady=(4, 0))
+
+    def _build_math_calculator_fields(self) -> None:
+        for child in self._math_calc_fields_frame.winfo_children():
+            child.destroy()
+        kind = self._math_calc_kind_var.get()
+        _title, fields = MATH_CALCULATORS[kind]
+        row_offset = 0
+        if kind == "speed_distance_time":
+            target_row = tk.Frame(self._math_calc_fields_frame, bg=self.colors["panel"])
+            target_row.grid(row=0, column=0, columnspan=2, sticky="w", pady=(0, 8))
+            row_offset = 1
+            self._label(target_row, "Find", size=9, bold=True, background=self.colors["panel"]).pack(side="left", padx=(0, 9))
+            target_choices = {"distance": "Distance", "speed": "Speed", "time": "Time"}
+            target_label = self._math_calc_target_var.get()
+            if target_label not in target_choices:
+                self._math_calc_target_var.set("distance")
+                target_label = "distance"
+            target_var = tk.StringVar(value=target_choices[target_label])
+            target_combo = ttk.Combobox(target_row, textvariable=target_var, values=list(target_choices.values()), state="readonly", width=16)
+            target_combo.pack(side="left")
+            target_combo.bind("<<ComboboxSelected>>", lambda _event, variable=target_var, choices={value: key for key, value in target_choices.items()}: self._set_math_target(choices[variable.get()]))
+            fields = tuple(item for item in fields if item[0] != target_label)
+        self._math_calc_fields_frame.grid_columnconfigure(0, weight=1, uniform="calc_field")
+        self._math_calc_fields_frame.grid_columnconfigure(1, weight=1, uniform="calc_field")
+        for index, (key, label) in enumerate(fields):
+            field = tk.Frame(self._math_calc_fields_frame, bg=self.colors["panel"])
+            field.grid(row=row_offset + index // 2, column=index % 2, sticky="ew", padx=(0 if index % 2 == 0 else 7, 7 if index % 2 == 0 else 0), pady=4)
+            self._label(field, label, size=8, bold=True, color=self.colors["muted"], background=self.colors["panel"]).pack(anchor="w", pady=(0, 4))
+            if key == "share":
+                variable = self._math_calc_share_var
+                combo = ttk.Combobox(field, textvariable=variable, values=("second", "first"), state="readonly", width=22)
+                combo.pack(fill="x")
+            else:
+                variable = self._math_calc_vars.get(key)
+                if variable is None:
+                    variable = tk.StringVar(value="")
+                    self._math_calc_vars[key] = variable
+                ttk.Entry(field, textvariable=variable).pack(fill="x")
+
+    def _math_calculator_changed(self, _event: tk.Event | None = None) -> None:
+        selected = self._math_calc_choice_var.get()
+        self._math_calc_kind_var.set(next(key for key, value in MATH_CALCULATORS.items() if value[0] == selected))
+        for variable in self._math_calc_vars.values():
+            variable.set("")
+        self._math_calc_share_var.set("second")
+        self._math_calc_target_var.set("distance")
+        self._math_calc_solution = None
+        self._math_calc_error = ""
+        self._render_math_lab()
+
+    def _set_math_target(self, target: str) -> None:
+        self._math_calc_target_var.set(target)
+        self._math_calc_solution = None
+        self._math_calc_error = ""
+        self._render_math_lab()
+
+    def _solve_math_calculation(self) -> None:
+        kind = self._math_calc_kind_var.get()
+        values = {key: variable.get() for key, variable in self._math_calc_vars.items()}
+        values["share"] = self._math_calc_share_var.get()
+        values["solve_for"] = self._math_calc_target_var.get()
+        try:
+            self._math_calc_solution = solve_calculation(kind, values)
+            self._math_calc_error = ""
+        except ValueError as exc:
+            self._math_calc_solution = None
+            self._math_calc_error = str(exc)
+        self._render_math_lab()
+
+    def _clear_math_calculation(self) -> None:
+        for variable in self._math_calc_vars.values():
+            variable.set("")
+        self._math_calc_solution = None
+        self._math_calc_error = ""
+        self._render_math_lab()
+
+    def _check_math_drill(self) -> None:
+        if self._math_drill_checked:
+            return
+        answer = self._math_drill_answer_var.get().strip()
+        if not answer:
+            self._math_drill_notice = "Enter your answer first. A best guess is fine — the steps will teach the method."
+            self._render_math_lab()
+            return
+        self._math_drill_notice = ""
+        self._math_drill_correct = answer_matches(answer, self._math_drill.answer)
+        self._math_drill_checked = True
+        stats = self.profile["stats"]
+        stats["math_drill_attempts"] = int(stats.get("math_drill_attempts", 0) or 0) + 1
+        if self._math_drill_correct:
+            stats["math_drill_correct"] = int(stats.get("math_drill_correct", 0) or 0) + 1
+            stats["math_drill_streak"] = int(stats.get("math_drill_streak", 0) or 0) + 1
+        else:
+            stats["math_drill_streak"] = 0
+        self._save_profile(quiet=True)
+        self._render_math_lab()
+
+    def _new_math_drill(self) -> None:
+        self._math_drill = generate_math_drill()
+        self._math_drill_answer_var.set("")
+        self._math_drill_checked = False
+        self._math_drill_correct = False
+        self._math_drill_notice = ""
+        self._render_math_lab()
 
     def _start_from_practice(self) -> None:
         label = self._practice_domain_var.get()
@@ -695,44 +1045,44 @@ class PSCCoachApp(tk.Tk):
         total = len(questions)
         answered = sum(1 for item in questions if session["answers"].get(item["id"]))
 
-        top = tk.Frame(page, bg=COLORS["bg"])
+        top = tk.Frame(page, bg=self.colors["bg"])
         top.pack(fill="x", pady=(2, 10))
         title = "Learn as you go" if session["mode"] == "practice" else "Timed mock exam"
         self._label(top, title, size=18, bold=True).pack(side="left")
         if session["mode"] == "mock":
-            self.timer_label = self._label(top, "", size=16, bold=True, color=COLORS["gold"], background=COLORS["gold_light"], padx=12, pady=7)
+            self.timer_label = self._label(top, "", size=16, bold=True, color=self.colors["gold"], background=self.colors["gold_light"], padx=12, pady=7)
             self.timer_label.pack(side="right")
         else:
-            self._label(top, "Untimed · explanation after each answer", size=9, color=COLORS["muted"]).pack(side="right")
+            self._label(top, "Untimed · explanation after each answer", size=9, color=self.colors["muted"]).pack(side="right")
 
-        progress = tk.Frame(page, bg=COLORS["bg"])
+        progress = tk.Frame(page, bg=self.colors["bg"])
         progress.pack(fill="x", pady=(0, 12))
         self._label(progress, f"Question {index + 1} of {total}", size=10, bold=True).pack(side="left")
-        self._label(progress, f"Answered {answered}/{total}", size=9, color=COLORS["muted"]).pack(side="right")
+        self._label(progress, f"Answered {answered}/{total}", size=9, color=self.colors["muted"]).pack(side="right")
         progressbar = ttk.Progressbar(progress, maximum=total, value=index + 1, mode="determinate")
         progressbar.pack(side="bottom", fill="x", pady=(7, 0))
 
         panel = self._card(page, padding=22)
         panel.pack(fill="x", pady=(0, 12))
         content = panel.content  # type: ignore[attr-defined]
-        meta = tk.Frame(content, bg=COLORS["panel"])
+        meta = tk.Frame(content, bg=self.colors["panel"])
         meta.pack(fill="x", pady=(0, 12))
-        self._label(meta, DOMAIN_LABELS.get(question["domain"], question["domain"]), size=8, bold=True, color=COLORS["accent"], background=COLORS["accent_light"], padx=9, pady=5).pack(side="left")
-        self._label(meta, question.get("topic", "General practice"), size=9, color=COLORS["muted"], background=COLORS["panel"]).pack(side="left", padx=10)
-        self._label(meta, f"Level {question.get('difficulty', 4)}/10", size=8, color=COLORS["muted"], background=COLORS["panel"]).pack(side="right")
-        self._label(content, question["question"], size=15, bold=True, background=COLORS["panel"], wrap=900).pack(anchor="w", pady=(0, 17))
+        self._label(meta, DOMAIN_LABELS.get(question["domain"], question["domain"]), size=8, bold=True, color=self.colors["accent"], background=self.colors["accent_light"], padx=9, pady=5).pack(side="left")
+        self._label(meta, question.get("topic", "General practice"), size=9, color=self.colors["muted"], background=self.colors["panel"]).pack(side="left", padx=10)
+        self._label(meta, f"Level {question.get('difficulty', 4)}/10", size=8, color=self.colors["muted"], background=self.colors["panel"]).pack(side="right")
+        self._label(content, question["question"], size=15, bold=True, background=self.colors["panel"], wrap=900).pack(anchor="w", pady=(0, 17))
 
         self._option_var = tk.StringVar(value=session["answers"].get(qid, ""))
         is_checked = session["mode"] == "practice" and qid in session["checked"]
         for letter in "ABCD":
             choice_text = question["options"][letter]
-            choice_bg = COLORS["panel_alt"]
-            choice_fg = COLORS["ink"]
+            choice_bg = self.colors["panel_alt"]
+            choice_fg = self.colors["ink"]
             if is_checked and letter == question["answer"]:
-                choice_bg, choice_fg = COLORS["accent_light"], COLORS["accent_dark"]
+                choice_bg, choice_fg = self.colors["accent_light"], self.colors["accent_dark"]
             elif is_checked and letter == session["answers"].get(qid):
-                choice_bg, choice_fg = COLORS["red_light"], COLORS["red"]
-            row = tk.Frame(content, bg=choice_bg, highlightbackground=COLORS["border"], highlightthickness=1, padx=8, pady=6)
+                choice_bg, choice_fg = self.colors["red_light"], self.colors["red"]
+            row = tk.Frame(content, bg=choice_bg, highlightbackground=self.colors["border"], highlightthickness=1, padx=8, pady=6)
             row.pack(fill="x", pady=4)
             radio = tk.Radiobutton(
                 row,
@@ -747,7 +1097,7 @@ class PSCCoachApp(tk.Tk):
                 font=(FONT, 10, "bold" if is_checked and letter == question["answer"] else "normal"),
                 fg=choice_fg,
                 bg=choice_bg,
-                activeforeground=COLORS["accent"],
+                activeforeground=self.colors["accent"],
                 activebackground=choice_bg,
                 selectcolor=choice_bg,
                 relief="flat",
@@ -760,20 +1110,22 @@ class PSCCoachApp(tk.Tk):
 
         if is_checked:
             correct = session["answers"].get(qid) == question["answer"]
-            feedback_bg = COLORS["accent_light"] if correct else COLORS["red_light"]
-            feedback_fg = COLORS["accent_dark"] if correct else COLORS["red"]
+            feedback_bg = self.colors["accent_light"] if correct else self.colors["red_light"]
+            feedback_fg = self.colors["accent_dark"] if correct else self.colors["red"]
             feedback = tk.Frame(content, bg=feedback_bg, padx=13, pady=11)
             feedback.pack(fill="x", pady=(13, 2))
             result_title = "Correct — keep going." if correct else f"Not quite. The answer is {question['answer']}."
             self._label(feedback, result_title, size=10, bold=True, color=feedback_fg, background=feedback_bg).pack(anchor="w")
             if question.get("explanation"):
-                self._label(feedback, question["explanation"], size=9, color=COLORS["ink"], background=feedback_bg, wrap=900).pack(anchor="w", pady=(5, 0))
+                self._label(feedback, question["explanation"], size=9, color=self.colors["ink"], background=feedback_bg, wrap=900).pack(anchor="w", pady=(5, 0))
+            if question.get("mnemonic"):
+                self._label(feedback, f"Memory hook: {question['mnemonic']}", size=9, bold=True, color=self.colors["accent_dark"], background=feedback_bg, wrap=900).pack(anchor="w", pady=(5, 0))
             if question.get("source_hint"):
-                self._label(feedback, question["source_hint"], size=8, color=COLORS["muted"], background=feedback_bg, wrap=900).pack(anchor="w", pady=(5, 0))
+                self._label(feedback, question["source_hint"], size=8, color=self.colors["muted"], background=feedback_bg, wrap=900).pack(anchor="w", pady=(5, 0))
         elif session["mode"] == "practice":
-            self._label(content, "Choose one answer, then check it to see the worked explanation.", size=9, color=COLORS["muted"], background=COLORS["panel"]).pack(anchor="w", pady=(10, 0))
+            self._label(content, "Choose one answer, then check it to see the worked explanation.", size=9, color=self.colors["muted"], background=self.colors["panel"]).pack(anchor="w", pady=(10, 0))
 
-        nav = tk.Frame(page, bg=COLORS["bg"])
+        nav = tk.Frame(page, bg=self.colors["bg"])
         nav.pack(fill="x", pady=(0, 14))
         self._button(nav, "Previous", lambda: self._navigate_question(index - 1), compact=True, state="normal" if index else "disabled").pack(side="left")
         if session["mode"] == "practice":
@@ -790,11 +1142,11 @@ class PSCCoachApp(tk.Tk):
         map_card = self._card(page, padding=15)
         map_card.pack(fill="x", pady=(0, 18))
         map_content = map_card.content  # type: ignore[attr-defined]
-        map_header = tk.Frame(map_content, bg=COLORS["panel"])
+        map_header = tk.Frame(map_content, bg=self.colors["panel"])
         map_header.pack(fill="x", pady=(0, 8))
-        self._label(map_header, "Question map", size=11, bold=True, background=COLORS["panel"]).pack(side="left")
-        self._label(map_header, "Green = answered · gold = marked for review", size=8, color=COLORS["muted"], background=COLORS["panel"]).pack(side="right")
-        grid = tk.Frame(map_content, bg=COLORS["panel"])
+        self._label(map_header, "Question map", size=11, bold=True, background=self.colors["panel"]).pack(side="left")
+        self._label(map_header, "Green = answered · gold = marked for review", size=8, color=self.colors["muted"], background=self.colors["panel"]).pack(side="right")
+        grid = tk.Frame(map_content, bg=self.colors["panel"])
         grid.pack(anchor="w")
         self._question_map_buttons = []
         for number in range(total):
@@ -807,6 +1159,10 @@ class PSCCoachApp(tk.Tk):
                 font=(FONT, 8, "bold"),
                 relief="flat",
                 bd=0,
+                bg=self.colors["panel_alt"],
+                fg=self.colors["muted"],
+                activebackground=self.colors["panel_alt"],
+                activeforeground=self.colors["ink"],
                 cursor="hand2",
                 command=lambda item=number: self._navigate_question(item),
             )
@@ -832,16 +1188,16 @@ class PSCCoachApp(tk.Tk):
             question = self.session["questions"][index]
             answer = self.session["answers"].get(question["id"])
             if self.session["mode"] == "practice" and question["id"] in self.session["checked"]:
-                background = COLORS["accent"] if answer == question["answer"] else COLORS["red"]
-                foreground = COLORS["white"]
+                background = self.colors["accent"] if answer == question["answer"] else self.colors["red"]
+                foreground = self.colors["accent_text"]
             elif index in self.session["flagged"]:
-                background, foreground = COLORS["gold_light"], COLORS["gold"]
+                background, foreground = self.colors["gold_light"], self.colors["gold"]
             elif answer:
-                background, foreground = COLORS["blue_light"], COLORS["blue"]
+                background, foreground = self.colors["blue_light"], self.colors["blue"]
             else:
-                background, foreground = COLORS["panel_alt"], COLORS["muted"]
+                background, foreground = self.colors["panel_alt"], self.colors["muted"]
             if index == current:
-                background, foreground = COLORS["nav"], COLORS["white"]
+                background, foreground = self.colors["nav"], self.colors["white"]
             button.configure(bg=background, fg=foreground, activebackground=background, activeforeground=foreground)
 
     def _navigate_question(self, index: int) -> None:
@@ -933,7 +1289,7 @@ class PSCCoachApp(tk.Tk):
             return
         remaining = max(0, int(self.session["deadline"] - time.monotonic()))
         if hasattr(self, "timer_label") and self.timer_label.winfo_exists():
-            self.timer_label.configure(text=f"TIME LEFT  {_minutes(remaining)}", fg=COLORS["red"] if remaining < 300 else COLORS["gold"])
+            self.timer_label.configure(text=f"TIME LEFT  {_minutes(remaining)}", fg=self.colors["red"] if remaining < 300 else self.colors["gold"])
         if remaining <= 0:
             self._submit_session(automatic=True)
             return
@@ -951,17 +1307,17 @@ class PSCCoachApp(tk.Tk):
         label = "Strong work — keep your review loop going." if score >= 80 else "Good diagnostic — turn the misses into your next study targets." if score >= 55 else "A useful baseline — focus on the explanations and build step by step."
         self._heading(page, "Session complete", f"{track.name} · {'Timed mock' if result['mode'] == 'mock' else 'Practice'} · {_minutes(result['elapsed_seconds'])}")
 
-        hero = tk.Frame(page, bg=COLORS["nav"], padx=22, pady=21)
+        hero = tk.Frame(page, bg=self.colors["nav"], padx=22, pady=21)
         hero.grid(row=1, column=0, sticky="ew", pady=(0, 14))
         hero.grid_columnconfigure(0, weight=1)
         score_color = "#9ce4c2" if score >= 70 else "#ffd887" if score >= 45 else "#ffaaa2"
-        self._label(hero, _percent(score), size=34, bold=True, color=score_color, background=COLORS["nav"]).grid(row=0, column=0, sticky="w")
-        self._label(hero, label, size=11, bold=True, color=COLORS["white"], background=COLORS["nav"], wrap=670).grid(row=1, column=0, sticky="w", pady=(4, 0))
-        self._label(hero, f"{result['correct']} correct  ·  {result['wrong']} wrong  ·  {result['skipped']} skipped", size=10, color="#c7d9d1", background=COLORS["nav"]).grid(row=0, column=1, sticky="e", padx=(15, 0))
+        self._label(hero, _percent(score), size=34, bold=True, color=score_color, background=self.colors["nav"]).grid(row=0, column=0, sticky="w")
+        self._label(hero, label, size=11, bold=True, color=self.colors["white"], background=self.colors["nav"], wrap=670).grid(row=1, column=0, sticky="w", pady=(4, 0))
+        self._label(hero, f"{result['correct']} correct  ·  {result['wrong']} wrong  ·  {result['skipped']} skipped", size=10, color="#c7d9d1", background=self.colors["nav"]).grid(row=0, column=1, sticky="e", padx=(15, 0))
         if result["penalty"]:
-            self._label(hero, f"Net marks: {result['net_marks']:.2f} / {result['total']}  ·  wrong-answer penalty: 1/3", size=9, color="#c7d9d1", background=COLORS["nav"]).grid(row=1, column=1, sticky="e", padx=(15, 0), pady=(5, 0))
+            self._label(hero, f"Net marks: {result['net_marks']:.2f} / {result['total']}  ·  wrong-answer penalty: 1/3", size=9, color="#c7d9d1", background=self.colors["nav"]).grid(row=1, column=1, sticky="e", padx=(15, 0), pady=(5, 0))
 
-        actions = tk.Frame(page, bg=COLORS["bg"])
+        actions = tk.Frame(page, bg=self.colors["bg"])
         actions.grid(row=2, column=0, sticky="ew", pady=(0, 14))
         weak_this_session = sorted(result["by_domain"].items(), key=lambda item: item[1]["accuracy_pct"])
         target_domain = weak_this_session[0][0] if weak_this_session else None
@@ -973,32 +1329,32 @@ class PSCCoachApp(tk.Tk):
         breakdown = self._card(page, padding=18)
         breakdown.grid(row=3, column=0, sticky="ew", pady=(0, 14))
         bcontent = breakdown.content  # type: ignore[attr-defined]
-        self._label(bcontent, "Subject breakdown", size=13, bold=True, background=COLORS["panel"]).pack(anchor="w", pady=(0, 7))
+        self._label(bcontent, "Subject breakdown", size=13, bold=True, background=self.colors["panel"]).pack(anchor="w", pady=(0, 7))
         for domain, values in sorted(result["by_domain"].items(), key=lambda item: item[1]["accuracy_pct"]):
             self._accuracy_row(
                 bcontent,
                 DOMAIN_LABELS.get(domain, domain),
                 values["accuracy_pct"],
                 f"{values['correct']}/{values['total']} correct",
-                parent_bg=COLORS["panel"],
+                parent_bg=self.colors["panel"],
             )
         for note in result["notes"]:
-            self._label(bcontent, note, size=8, color=COLORS["gold"], background=COLORS["gold_light"], wrap=900, padx=10, pady=7).pack(fill="x", pady=(7, 0))
+            self._label(bcontent, note, size=8, color=self.colors["gold"], background=self.colors["gold_light"], wrap=900, padx=10, pady=7).pack(fill="x", pady=(7, 0))
 
         self._label(page, "Answer review", size=15, bold=True).grid(row=4, column=0, sticky="w", pady=(3, 8))
         wrong = [item for item in result["reviews"] if not item["was_correct"]]
         if wrong:
-            self._label(page, f"{len(wrong)} question(s) were incorrect or left blank. Each mistake has been added to your spaced-review deck.", size=9, color=COLORS["muted"], wrap=900).grid(row=5, column=0, sticky="w", pady=(0, 8))
+            self._label(page, f"{len(wrong)} question(s) were incorrect or left blank. Each mistake has been added to your spaced-review deck.", size=9, color=self.colors["muted"], wrap=900).grid(row=5, column=0, sticky="w", pady=(0, 8))
         else:
-            self._label(page, "All answers correct. Review the key explanations and keep practising mixed topics.", size=9, color=COLORS["muted"], wrap=900).grid(row=5, column=0, sticky="w", pady=(0, 8))
+            self._label(page, "All answers correct. Review the key explanations and keep practising mixed topics.", size=9, color=self.colors["muted"], wrap=900).grid(row=5, column=0, sticky="w", pady=(0, 8))
 
         self._show_all_review_var = tk.BooleanVar(value=False)
         review_toggle = ttk.Checkbutton(page, text="Show every question (including correct answers)", variable=self._show_all_review_var, command=self._refresh_result_review)
         review_toggle.grid(row=6, column=0, sticky="w", pady=(0, 8))
-        self._review_container = tk.Frame(page, bg=COLORS["bg"])
+        self._review_container = tk.Frame(page, bg=self.colors["bg"])
         self._review_container.grid(row=7, column=0, sticky="ew")
         self._populate_result_review()
-        self._label(page, "Practice scores are learning signals, not official marks or a guarantee of selection. Always check the current post notification.", size=8, color=COLORS["muted"], wrap=900).grid(row=8, column=0, sticky="w", pady=(15, 24))
+        self._label(page, "Practice scores are learning signals, not official marks or a guarantee of selection. Always check the current post notification.", size=8, color=self.colors["muted"], wrap=900).grid(row=8, column=0, sticky="w", pady=(15, 24))
 
     def _refresh_result_review(self) -> None:
         self._populate_result_review()
@@ -1020,14 +1376,16 @@ class PSCCoachApp(tk.Tk):
             card.pack(fill="x", pady=5)
             content = card.content  # type: ignore[attr-defined]
             label = f"{number}. {item['topic']}  ·  {DOMAIN_LABELS.get(item['domain'], item['domain'])}"
-            self._label(content, label, size=8, bold=True, color=COLORS["muted"], background=COLORS["panel"]).pack(anchor="w")
-            self._label(content, item["question"], size=10, bold=True, background=COLORS["panel"], wrap=900).pack(anchor="w", pady=(5, 7))
-            self._label(content, f"Your answer: {user_text}", size=9, color=COLORS["red"] if not item["was_correct"] else COLORS["accent"], background=COLORS["panel"], wrap=900).pack(anchor="w", pady=2)
-            self._label(content, f"Correct answer: {correct_letter}. {correct_text}", size=9, bold=True, color=COLORS["accent_dark"], background=COLORS["panel"], wrap=900).pack(anchor="w", pady=2)
+            self._label(content, label, size=8, bold=True, color=self.colors["muted"], background=self.colors["panel"]).pack(anchor="w")
+            self._label(content, item["question"], size=10, bold=True, background=self.colors["panel"], wrap=900).pack(anchor="w", pady=(5, 7))
+            self._label(content, f"Your answer: {user_text}", size=9, color=self.colors["red"] if not item["was_correct"] else self.colors["accent"], background=self.colors["panel"], wrap=900).pack(anchor="w", pady=2)
+            self._label(content, f"Correct answer: {correct_letter}. {correct_text}", size=9, bold=True, color=self.colors["accent_dark"], background=self.colors["panel"], wrap=900).pack(anchor="w", pady=2)
             if item.get("explanation"):
-                self._label(content, item["explanation"], size=9, color=COLORS["muted"], background=COLORS["panel"], wrap=900).pack(anchor="w", pady=(5, 0))
+                self._label(content, item["explanation"], size=9, color=self.colors["muted"], background=self.colors["panel"], wrap=900).pack(anchor="w", pady=(5, 0))
+            if item.get("mnemonic"):
+                self._label(content, f"Memory hook: {item['mnemonic']}", size=9, bold=True, color=self.colors["accent"], background=self.colors["panel"], wrap=900).pack(anchor="w", pady=(5, 0))
             if item.get("source_hint"):
-                self._label(content, item["source_hint"], size=8, color=COLORS["muted_light"], background=COLORS["panel"], wrap=900).pack(anchor="w", pady=(4, 0))
+                self._label(content, item["source_hint"], size=8, color=self.colors["muted_light"], background=self.colors["panel"], wrap=900).pack(anchor="w", pady=(4, 0))
 
     def _render_flashcards(self, preserve_queue: bool = False) -> None:
         page = self._new_scroll_page()
@@ -1046,8 +1404,8 @@ class PSCCoachApp(tk.Tk):
         stats_card = self._card(page, padding=17)
         stats_card.grid(row=1, column=0, sticky="ew", pady=(0, 14))
         stats_content = stats_card.content  # type: ignore[attr-defined]
-        self._label(stats_content, f"{len(due)} due now  ·  {len(cards)} total cards", size=14, bold=True, background=COLORS["panel"]).pack(anchor="w")
-        self._label(stats_content, "Again brings a card back in about 10 minutes; Hard, Good and Easy increase the interval.", size=9, color=COLORS["muted"], background=COLORS["panel"]).pack(anchor="w", pady=(5, 0))
+        self._label(stats_content, f"{len(due)} due now  ·  {len(cards)} total cards", size=14, bold=True, background=self.colors["panel"]).pack(anchor="w")
+        self._label(stats_content, "Again brings a card back in about 10 minutes; Hard, Good and Easy increase the interval.", size=9, color=self.colors["muted"], background=self.colors["panel"]).pack(anchor="w", pady=(5, 0))
 
         if due:
             if not preserve_queue:
@@ -1061,8 +1419,8 @@ class PSCCoachApp(tk.Tk):
             empty = self._card(page, padding=24)
             empty.grid(row=2, column=0, sticky="ew", pady=(0, 14))
             empty_content = empty.content  # type: ignore[attr-defined]
-            self._label(empty_content, "You're all caught up.", size=17, bold=True, color=COLORS["accent"], background=COLORS["panel"]).pack(anchor="w")
-            self._label(empty_content, "Cards created from mistakes will appear here when they are due. Keep taking short quizzes to grow your deck.", size=10, color=COLORS["muted"], background=COLORS["panel"], wrap=850).pack(anchor="w", pady=(5, 0))
+            self._label(empty_content, "You're all caught up.", size=17, bold=True, color=self.colors["accent"], background=self.colors["panel"]).pack(anchor="w")
+            self._label(empty_content, "Cards created from mistakes will appear here when they are due. Keep taking short quizzes to grow your deck.", size=10, color=self.colors["muted"], background=self.colors["panel"], wrap=850).pack(anchor="w", pady=(5, 0))
 
         if cards:
             self._label(page, "Your review deck", size=14, bold=True).grid(row=3, column=0, sticky="w", pady=(5, 8))
@@ -1070,15 +1428,17 @@ class PSCCoachApp(tk.Tk):
                 item_card = self._card(page, padding=13)
                 item_card.grid(sticky="ew", pady=4)
                 item_content = item_card.content  # type: ignore[attr-defined]
-                top = tk.Frame(item_content, bg=COLORS["panel"])
+                top = tk.Frame(item_content, bg=self.colors["panel"])
                 top.pack(fill="x")
-                self._label(top, f"{DOMAIN_LABELS.get(card.get('domain', ''), card.get('domain', ''))}  ·  {card.get('topic', '')}", size=8, bold=True, color=COLORS["accent"], background=COLORS["panel"]).pack(side="left")
-                self._label(top, f"Due {card.get('next_review', '')[:10]}", size=8, color=COLORS["muted"], background=COLORS["panel"]).pack(side="right")
-                self._label(item_content, card.get("question", ""), size=9, bold=True, background=COLORS["panel"], wrap=900).pack(anchor="w", pady=(5, 3))
-                self._label(item_content, f"Answer: {card.get('answer', '')}", size=9, color=COLORS["muted"], background=COLORS["panel"], wrap=900).pack(anchor="w")
+                self._label(top, f"{DOMAIN_LABELS.get(card.get('domain', ''), card.get('domain', ''))}  ·  {card.get('topic', '')}", size=8, bold=True, color=self.colors["accent"], background=self.colors["panel"]).pack(side="left")
+                self._label(top, f"Due {card.get('next_review', '')[:10]}", size=8, color=self.colors["muted"], background=self.colors["panel"]).pack(side="right")
+                self._label(item_content, card.get("question", ""), size=9, bold=True, background=self.colors["panel"], wrap=900).pack(anchor="w", pady=(5, 3))
+                self._label(item_content, f"Answer: {card.get('answer', '')}", size=9, color=self.colors["muted"], background=self.colors["panel"], wrap=900).pack(anchor="w")
+                if card.get("mnemonic"):
+                    self._label(item_content, f"Memory hook: {card['mnemonic']}", size=8, color=self.colors["accent"], background=self.colors["panel"], wrap=900).pack(anchor="w", pady=(4, 0))
         else:
             self._label(page, "Your deck is empty", size=14, bold=True).grid(row=3, column=0, sticky="w", pady=(6, 4))
-            self._label(page, "Incorrect and skipped answers become review cards automatically when you finish a session.", size=9, color=COLORS["muted"], wrap=900).grid(row=4, column=0, sticky="w", pady=(0, 18))
+            self._label(page, "Incorrect and skipped answers become review cards automatically when you finish a session.", size=9, color=self.colors["muted"], wrap=900).grid(row=4, column=0, sticky="w", pady=(0, 18))
 
     def _render_flashcard_item(self, page: tk.Frame, due: list[dict[str, Any]]) -> None:
         for child in getattr(self, "_flashcard_panel_children", []):
@@ -1094,20 +1454,22 @@ class PSCCoachApp(tk.Tk):
         panel.grid(row=2, column=0, sticky="ew", pady=(0, 14))
         self._flashcard_panel_children = [panel]
         content = panel.content  # type: ignore[attr-defined]
-        self._label(content, f"CARD {self._flashcard_index + 1} OF {len(self._flashcard_queue)}", size=8, bold=True, color=COLORS["muted"], background=COLORS["panel"]).pack(anchor="w")
-        self._label(content, f"{DOMAIN_LABELS.get(card.get('domain', ''), card.get('domain', ''))}  ·  {card.get('topic', '')}", size=9, color=COLORS["accent"], background=COLORS["panel"]).pack(anchor="w", pady=(4, 8))
-        self._label(content, card.get("question", ""), size=15, bold=True, background=COLORS["panel"], wrap=900).pack(anchor="w", pady=(0, 12))
+        self._label(content, f"CARD {self._flashcard_index + 1} OF {len(self._flashcard_queue)}", size=8, bold=True, color=self.colors["muted"], background=self.colors["panel"]).pack(anchor="w")
+        self._label(content, f"{DOMAIN_LABELS.get(card.get('domain', ''), card.get('domain', ''))}  ·  {card.get('topic', '')}", size=9, color=self.colors["accent"], background=self.colors["panel"]).pack(anchor="w", pady=(4, 8))
+        self._label(content, card.get("question", ""), size=15, bold=True, background=self.colors["panel"], wrap=900).pack(anchor="w", pady=(0, 12))
         for letter, option in card.get("options", {}).items():
-            self._label(content, f"{letter}. {option}", size=9, color=COLORS["muted"], background=COLORS["panel"], wrap=900).pack(anchor="w", pady=1)
-        self._flashcard_rating_frame = tk.Frame(content, bg=COLORS["panel"])
+            self._label(content, f"{letter}. {option}", size=9, color=self.colors["muted"], background=self.colors["panel"], wrap=900).pack(anchor="w", pady=1)
+        self._flashcard_rating_frame = tk.Frame(content, bg=self.colors["panel"])
         if self._flashcard_revealed:
-            answer_panel = tk.Frame(content, bg=COLORS["accent_light"], padx=12, pady=10)
+            answer_panel = tk.Frame(content, bg=self.colors["accent_light"], padx=12, pady=10)
             answer_panel.pack(fill="x", pady=(12, 3))
-            self._label(answer_panel, f"Answer: {card.get('answer', '')}", size=11, bold=True, color=COLORS["accent_dark"], background=COLORS["accent_light"], wrap=900).pack(anchor="w")
+            self._label(answer_panel, f"Answer: {card.get('answer', '')}", size=11, bold=True, color=self.colors["accent_dark"], background=self.colors["accent_light"], wrap=900).pack(anchor="w")
             if card.get("explanation"):
-                self._label(answer_panel, card["explanation"], size=9, color=COLORS["ink"], background=COLORS["accent_light"], wrap=900).pack(anchor="w", pady=(5, 0))
+                self._label(answer_panel, card["explanation"], size=9, color=self.colors["ink"], background=self.colors["accent_light"], wrap=900).pack(anchor="w", pady=(5, 0))
+            if card.get("mnemonic"):
+                self._label(answer_panel, f"Memory hook: {card['mnemonic']}", size=9, bold=True, color=self.colors["accent_dark"], background=self.colors["accent_light"], wrap=900).pack(anchor="w", pady=(5, 0))
             self._flashcard_rating_frame.pack(fill="x", pady=(12, 0))
-            self._label(self._flashcard_rating_frame, "How well did you recall it?", size=9, bold=True, background=COLORS["panel"]).pack(anchor="w", pady=(0, 7))
+            self._label(self._flashcard_rating_frame, "How well did you recall it?", size=9, bold=True, background=self.colors["panel"]).pack(anchor="w", pady=(0, 7))
             ratings = (("Again", "again", "Danger.TButton"), ("Hard", "hard", "Soft.TButton"), ("Good", "good", "Accent.TButton"), ("Easy", "easy", "Soft.TButton"))
             for label, value, style in ratings:
                 ttk.Button(self._flashcard_rating_frame, text=label, command=lambda selected=value: self._rate_flashcard(selected), style=style).pack(side="left", padx=(0, 7))
@@ -1150,27 +1512,29 @@ class PSCCoachApp(tk.Tk):
         stats_card = self._card(page, padding=17)
         stats_card.grid(row=1, column=0, sticky="ew", pady=(0, 14))
         stats_content = stats_card.content  # type: ignore[attr-defined]
-        self._label(stats_content, f"{len(due_flashcards(self.profile))} due now  ·  {len(self.profile.get('flashcards', []))} total cards", size=14, bold=True, background=COLORS["panel"]).pack(anchor="w")
+        self._label(stats_content, f"{len(due_flashcards(self.profile))} due now  ·  {len(self.profile.get('flashcards', []))} total cards", size=14, bold=True, background=self.colors["panel"]).pack(anchor="w")
         panel = self._card(page, padding=22)
         panel.grid(row=2, column=0, sticky="ew", pady=(0, 14))
         self._flashcard_panel_children = [panel]
         card_id = queue_ids[index]
         card = next(item for item in due if item["id"] == card_id)
         content = panel.content  # type: ignore[attr-defined]
-        self._label(content, f"CARD {index + 1} OF {len(queue_ids)}", size=8, bold=True, color=COLORS["muted"], background=COLORS["panel"]).pack(anchor="w")
-        self._label(content, f"{DOMAIN_LABELS.get(card.get('domain', ''), card.get('domain', ''))}  ·  {card.get('topic', '')}", size=9, color=COLORS["accent"], background=COLORS["panel"]).pack(anchor="w", pady=(4, 8))
-        self._label(content, card.get("question", ""), size=15, bold=True, background=COLORS["panel"], wrap=900).pack(anchor="w", pady=(0, 12))
+        self._label(content, f"CARD {index + 1} OF {len(queue_ids)}", size=8, bold=True, color=self.colors["muted"], background=self.colors["panel"]).pack(anchor="w")
+        self._label(content, f"{DOMAIN_LABELS.get(card.get('domain', ''), card.get('domain', ''))}  ·  {card.get('topic', '')}", size=9, color=self.colors["accent"], background=self.colors["panel"]).pack(anchor="w", pady=(4, 8))
+        self._label(content, card.get("question", ""), size=15, bold=True, background=self.colors["panel"], wrap=900).pack(anchor="w", pady=(0, 12))
         for letter, option in card.get("options", {}).items():
-            self._label(content, f"{letter}. {option}", size=9, color=COLORS["muted"], background=COLORS["panel"], wrap=900).pack(anchor="w", pady=1)
+            self._label(content, f"{letter}. {option}", size=9, color=self.colors["muted"], background=self.colors["panel"], wrap=900).pack(anchor="w", pady=1)
         if self._flashcard_revealed:
-            answer_panel = tk.Frame(content, bg=COLORS["accent_light"], padx=12, pady=10)
+            answer_panel = tk.Frame(content, bg=self.colors["accent_light"], padx=12, pady=10)
             answer_panel.pack(fill="x", pady=(12, 3))
-            self._label(answer_panel, f"Answer: {card.get('answer', '')}", size=11, bold=True, color=COLORS["accent_dark"], background=COLORS["accent_light"], wrap=900).pack(anchor="w")
+            self._label(answer_panel, f"Answer: {card.get('answer', '')}", size=11, bold=True, color=self.colors["accent_dark"], background=self.colors["accent_light"], wrap=900).pack(anchor="w")
             if card.get("explanation"):
-                self._label(answer_panel, card["explanation"], size=9, color=COLORS["ink"], background=COLORS["accent_light"], wrap=900).pack(anchor="w", pady=(5, 0))
-            row = tk.Frame(content, bg=COLORS["panel"])
+                self._label(answer_panel, card["explanation"], size=9, color=self.colors["ink"], background=self.colors["accent_light"], wrap=900).pack(anchor="w", pady=(5, 0))
+            if card.get("mnemonic"):
+                self._label(answer_panel, f"Memory hook: {card['mnemonic']}", size=9, bold=True, color=self.colors["accent_dark"], background=self.colors["accent_light"], wrap=900).pack(anchor="w", pady=(5, 0))
+            row = tk.Frame(content, bg=self.colors["panel"])
             row.pack(fill="x", pady=(12, 0))
-            self._label(row, "How well did you recall it?", size=9, bold=True, background=COLORS["panel"]).pack(anchor="w", pady=(0, 7))
+            self._label(row, "How well did you recall it?", size=9, bold=True, background=self.colors["panel"]).pack(anchor="w", pady=(0, 7))
             for label, value, style in (("Again", "again", "Danger.TButton"), ("Hard", "hard", "Soft.TButton"), ("Good", "good", "Accent.TButton"), ("Easy", "easy", "Soft.TButton")):
                 ttk.Button(row, text=label, command=lambda selected=value: self._rate_flashcard(selected), style=style).pack(side="left", padx=(0, 7))
         else:
@@ -1194,29 +1558,29 @@ class PSCCoachApp(tk.Tk):
         score = 100.0 * stats.get("correct", 0) / questions if questions else 0.0
         self._heading(page, "Your progress, made visible", "Use the trend to adjust your study plan. Small samples are noisy; compare several sessions rather than one score.")
 
-        metrics = tk.Frame(page, bg=COLORS["bg"])
+        metrics = tk.Frame(page, bg=self.colors["bg"])
         metrics.grid(row=1, column=0, sticky="ew", pady=(0, 13))
         for column in range(4):
             metrics.grid_columnconfigure(column, weight=1, uniform="progress_metric")
         values = (
-            ("OVERALL ACCURACY", _percent(score), COLORS["accent"]),
-            ("TOTAL QUESTIONS", f"{questions:,}", COLORS["blue"]),
-            ("COMPLETED SESSIONS", str(stats.get("sessions", 0)), COLORS["purple"]),
-            ("CURRENT STREAK", f"{stats.get('streak', 0)} days", COLORS["gold"]),
+            ("OVERALL ACCURACY", _percent(score), self.colors["accent"]),
+            ("TOTAL QUESTIONS", f"{questions:,}", self.colors["blue"]),
+            ("COMPLETED SESSIONS", str(stats.get("sessions", 0)), self.colors["purple"]),
+            ("CURRENT STREAK", f"{stats.get('streak', 0)} days", self.colors["gold"]),
         )
         for index, (label, value, color) in enumerate(values):
             card = self._card(metrics, padding=15)
             card.grid(row=0, column=index, sticky="nsew", padx=(0 if index == 0 else 5, 0 if index == 3 else 5))
             content = card.content  # type: ignore[attr-defined]
-            self._label(content, label, size=8, bold=True, color=COLORS["muted"], background=COLORS["panel"]).pack(anchor="w")
-            self._label(content, value, size=20, bold=True, color=color, background=COLORS["panel"]).pack(anchor="w", pady=(7, 0))
+            self._label(content, label, size=8, bold=True, color=self.colors["muted"], background=self.colors["panel"]).pack(anchor="w")
+            self._label(content, value, size=20, bold=True, color=color, background=self.colors["panel"]).pack(anchor="w", pady=(7, 0))
 
         chart_card = self._card(page, padding=18)
         chart_card.grid(row=2, column=0, sticky="ew", pady=(0, 13))
         chart_content = chart_card.content  # type: ignore[attr-defined]
-        self._label(chart_content, "Recent score trend", size=13, bold=True, background=COLORS["panel"]).pack(anchor="w")
-        self._label(chart_content, "Net score percentage by session (last 20 saved attempts).", size=8, color=COLORS["muted"], background=COLORS["panel"]).pack(anchor="w", pady=(3, 8))
-        chart = tk.Canvas(chart_content, height=190, bg=COLORS["panel"], highlightthickness=0)
+        self._label(chart_content, "Recent score trend", size=13, bold=True, background=self.colors["panel"]).pack(anchor="w")
+        self._label(chart_content, "Net score percentage by session (last 20 saved attempts).", size=8, color=self.colors["muted"], background=self.colors["panel"]).pack(anchor="w", pady=(3, 8))
+        chart = tk.Canvas(chart_content, height=190, bg=self.colors["panel"], highlightthickness=0)
         chart.pack(fill="x")
         chart.bind("<Configure>", lambda event: self._draw_score_trend(chart, event.width, event.height))
         self.after(30, lambda: self._draw_score_trend(chart, chart.winfo_width(), chart.winfo_height()))
@@ -1224,18 +1588,18 @@ class PSCCoachApp(tk.Tk):
         subjects = self._card(page, padding=18)
         subjects.grid(row=3, column=0, sticky="ew", pady=(0, 13))
         subject_content = subjects.content  # type: ignore[attr-defined]
-        self._label(subject_content, "Accuracy by subject", size=13, bold=True, background=COLORS["panel"]).pack(anchor="w", pady=(0, 6))
+        self._label(subject_content, "Accuracy by subject", size=13, bold=True, background=self.colors["panel"]).pack(anchor="w", pady=(0, 6))
         ranked = weak_domains(self.profile, minimum_questions=1)
         if ranked:
             for domain, pct, count in ranked:
-                self._accuracy_row(subject_content, DOMAIN_LABELS.get(domain, domain), pct, f"{count} answered", parent_bg=COLORS["panel"])
+                self._accuracy_row(subject_content, DOMAIN_LABELS.get(domain, domain), pct, f"{count} answered", parent_bg=self.colors["panel"])
         else:
-            self._label(subject_content, "Finish a quiz to start building subject-level progress.", size=9, color=COLORS["muted"], background=COLORS["panel"]).pack(anchor="w", pady=5)
+            self._label(subject_content, "Finish a quiz to start building subject-level progress.", size=9, color=self.colors["muted"], background=self.colors["panel"]).pack(anchor="w", pady=5)
 
         recent = self._card(page, padding=18)
         recent.grid(row=4, column=0, sticky="ew", pady=(0, 16))
         recent_content = recent.content  # type: ignore[attr-defined]
-        self._label(recent_content, "Recent sessions", size=13, bold=True, background=COLORS["panel"]).pack(anchor="w", pady=(0, 8))
+        self._label(recent_content, "Recent sessions", size=13, bold=True, background=self.colors["panel"]).pack(anchor="w", pady=(0, 8))
         columns = ("date", "track", "count", "correct", "score", "time")
         table = ttk.Treeview(recent_content, columns=columns, show="headings", height=min(9, max(3, len(self.profile.get("sessions", [])))))
         headers = (("date", "Date"), ("track", "Track"), ("count", "Questions"), ("correct", "Correct"), ("score", "Net score"), ("time", "Time"))
@@ -1262,7 +1626,7 @@ class PSCCoachApp(tk.Tk):
                 continue
         table.pack(fill="x")
         if not self.profile.get("sessions"):
-            self._label(recent_content, "No saved sessions yet. Start with a 10-question practice.", size=9, color=COLORS["muted"], background=COLORS["panel"]).pack(anchor="w", pady=(6, 0))
+            self._label(recent_content, "No saved sessions yet. Start with a 10-question practice.", size=9, color=self.colors["muted"], background=self.colors["panel"]).pack(anchor="w", pady=(6, 0))
 
     def _draw_score_trend(self, canvas: tk.Canvas, width: int, height: int) -> None:
         if not canvas.winfo_exists():
@@ -1276,13 +1640,13 @@ class PSCCoachApp(tk.Tk):
             except (TypeError, ValueError):
                 continue
         if not values:
-            canvas.create_text(width / 2, height / 2, text="Your first session will appear here", fill=COLORS["muted"], font=(FONT, 10))
+            canvas.create_text(width / 2, height / 2, text="Your first session will appear here", fill=self.colors["muted"], font=(FONT, 10))
             return
         left, right, top, bottom = 42, max(50, width - 20), 14, max(40, height - 28)
         for mark in (0, 50, 100):
             y = bottom - (bottom - top) * mark / 100
-            canvas.create_line(left, y, right, y, fill=COLORS["border"])
-            canvas.create_text(left - 8, y, text=f"{mark}%", fill=COLORS["muted"], anchor="e", font=(FONT, 8))
+            canvas.create_line(left, y, right, y, fill=self.colors["border"])
+            canvas.create_text(left - 8, y, text=f"{mark}%", fill=self.colors["muted"], anchor="e", font=(FONT, 8))
         if len(values) == 1:
             x_values = [(left + right) / 2]
         else:
@@ -1292,11 +1656,11 @@ class PSCCoachApp(tk.Tk):
             y = bottom - (bottom - top) * max(0, min(100, value)) / 100
             points.extend((x, y))
         if len(points) >= 4:
-            canvas.create_line(*points, fill=COLORS["accent"], width=3, smooth=True)
+            canvas.create_line(*points, fill=self.colors["accent"], width=3, smooth=True)
         for x, y in zip(points[::2], points[1::2]):
-            canvas.create_oval(x - 4, y - 4, x + 4, y + 4, fill=COLORS["accent"], outline=COLORS["white"], width=1)
-        canvas.create_text(left, height - 7, text="Oldest", fill=COLORS["muted"], anchor="w", font=(FONT, 8))
-        canvas.create_text(right, height - 7, text="Most recent", fill=COLORS["muted"], anchor="e", font=(FONT, 8))
+            canvas.create_oval(x - 4, y - 4, x + 4, y + 4, fill=self.colors["accent"], outline=self.colors["surface"], width=1)
+        canvas.create_text(left, height - 7, text="Oldest", fill=self.colors["muted"], anchor="w", font=(FONT, 8))
+        canvas.create_text(right, height - 7, text="Most recent", fill=self.colors["muted"], anchor="e", font=(FONT, 8))
 
     def _render_settings(self) -> None:
         page = self._new_scroll_page()
@@ -1306,15 +1670,15 @@ class PSCCoachApp(tk.Tk):
         bank_card = self._card(page, padding=19)
         bank_card.grid(row=1, column=0, sticky="ew", pady=(0, 13))
         bank = bank_card.content  # type: ignore[attr-defined]
-        self._label(bank, "Question library", size=14, bold=True, background=COLORS["panel"]).pack(anchor="w")
+        self._label(bank, "Question library", size=14, bold=True, background=self.colors["panel"]).pack(anchor="w")
         domain_counts: dict[str, int] = {}
         for question in self.question_pool:
             domain_counts[question["domain"]] = domain_counts.get(question["domain"], 0) + 1
         built_in_count = len(self.question_pool) - len(self.profile.get("custom_questions", []))
-        self._label(bank, f"{built_in_count} bundled original practice questions + {len(self.profile.get('custom_questions', []))} imported questions.", size=9, color=COLORS["muted"], background=COLORS["panel"]).pack(anchor="w", pady=(5, 9))
+        self._label(bank, f"{built_in_count} bundled original practice questions + {len(self.profile.get('custom_questions', []))} imported questions.", size=9, color=self.colors["muted"], background=self.colors["panel"]).pack(anchor="w", pady=(5, 9))
         sorted_domains = sorted(domain_counts.items(), key=lambda item: DOMAIN_LABELS.get(item[0], item[0]))
-        self._label(bank, "  ·  ".join(f"{DOMAIN_LABELS.get(domain, domain)}: {count}" for domain, count in sorted_domains), size=8, color=COLORS["muted"], background=COLORS["panel"], wrap=900).pack(anchor="w", pady=(0, 10))
-        buttons = tk.Frame(bank, bg=COLORS["panel"])
+        self._label(bank, "  ·  ".join(f"{DOMAIN_LABELS.get(domain, domain)}: {count}" for domain, count in sorted_domains), size=8, color=self.colors["muted"], background=self.colors["panel"], wrap=900).pack(anchor="w", pady=(0, 10))
+        buttons = tk.Frame(bank, bg=self.colors["panel"])
         buttons.pack(anchor="w")
         self._button(buttons, "Import question pack (JSON)", self._import_question_pack, primary=True).pack(side="left", padx=(0, 7))
         self._button(buttons, "Export progress backup", self._export_backup).pack(side="left", padx=7)
@@ -1323,25 +1687,30 @@ class PSCCoachApp(tk.Tk):
         goals = self._card(page, padding=19)
         goals.grid(row=2, column=0, sticky="ew", pady=(0, 13))
         goal_content = goals.content  # type: ignore[attr-defined]
-        self._label(goal_content, "Study preferences", size=14, bold=True, background=COLORS["panel"]).pack(anchor="w")
-        goal_row = tk.Frame(goal_content, bg=COLORS["panel"])
+        self._label(goal_content, "Study preferences", size=14, bold=True, background=self.colors["panel"]).pack(anchor="w")
+        goal_row = tk.Frame(goal_content, bg=self.colors["panel"])
         goal_row.pack(fill="x", pady=(10, 0))
-        self._label(goal_row, "Daily study goal", size=9, bold=True, background=COLORS["panel"]).pack(side="left", padx=(0, 10))
+        self._label(goal_row, "Daily study goal", size=9, bold=True, background=self.colors["panel"]).pack(side="left", padx=(0, 10))
         goal_var = tk.StringVar(value=str(self.profile["settings"].get("daily_goal_minutes", 45)))
         goal_combo = ttk.Combobox(goal_row, textvariable=goal_var, values=("15", "30", "45", "60", "90", "120"), state="readonly", width=8)
         goal_combo.pack(side="left")
         goal_combo.bind("<<ComboboxSelected>>", lambda _event: self._save_daily_goal(goal_var.get()))
-        self._label(goal_row, "minutes per day · builds the checklist on the Overview page", size=8, color=COLORS["muted"], background=COLORS["panel"]).pack(side="left", padx=9)
+        self._label(goal_row, "minutes per day · builds the checklist on the Overview page", size=8, color=self.colors["muted"], background=self.colors["panel"]).pack(side="left", padx=9)
+        self._label(goal_row, "Theme", size=9, bold=True, background=self.colors["panel"]).pack(side="left", padx=(16, 7))
+        theme_var = tk.StringVar(value=self.theme_name.title())
+        theme_combo = ttk.Combobox(goal_row, textvariable=theme_var, values=("Dark", "Light"), state="readonly", width=9)
+        theme_combo.pack(side="left")
+        theme_combo.bind("<<ComboboxSelected>>", lambda _event: self._set_theme(theme_var.get().lower()))
 
         syllabus = self._card(page, padding=19)
         syllabus.grid(row=3, column=0, sticky="ew", pady=(0, 13))
         syllabus_content = syllabus.content  # type: ignore[attr-defined]
-        self._label(syllabus_content, "Official syllabus references", size=14, bold=True, background=COLORS["panel"]).pack(anchor="w")
-        self._label(syllabus_content, "The app is independent of Kerala PSC. The linked notices define the study blueprints used here; verify the latest post-specific notification before an exam.", size=9, color=COLORS["muted"], background=COLORS["panel"], wrap=900).pack(anchor="w", pady=(5, 10))
+        self._label(syllabus_content, "Official syllabus references", size=14, bold=True, background=self.colors["panel"]).pack(anchor="w")
+        self._label(syllabus_content, "The app is independent of Kerala PSC. The linked notices define the study blueprints used here; verify the latest post-specific notification before an exam.", size=9, color=self.colors["muted"], background=self.colors["panel"], wrap=900).pack(anchor="w", pady=(5, 10))
         for track in TRACKS.values():
-            row = tk.Frame(syllabus_content, bg=COLORS["panel"])
+            row = tk.Frame(syllabus_content, bg=self.colors["panel"])
             row.pack(fill="x", pady=3)
-            self._label(row, track.name, size=9, bold=True, background=COLORS["panel"]).pack(side="left")
+            self._label(row, track.name, size=9, bold=True, background=self.colors["panel"]).pack(side="left")
             self._button(row, "Open official syllabus", lambda url=track.official_url: self._open_url(url), compact=True).pack(side="right")
         for label, url in CURRENT_AFFAIRS_SOURCES:
             self._button(syllabus_content, label, lambda target=url: self._open_url(target), compact=True).pack(side="left", padx=(0, 6), pady=(9, 0))
@@ -1349,18 +1718,18 @@ class PSCCoachApp(tk.Tk):
         profile_card = self._card(page, padding=19)
         profile_card.grid(row=4, column=0, sticky="ew", pady=(0, 13))
         profile_content = profile_card.content  # type: ignore[attr-defined]
-        self._label(profile_content, "Local data & privacy", size=14, bold=True, background=COLORS["panel"]).pack(anchor="w")
-        self._label(profile_content, f"Profile file: {self.store.path}\nScores, flashcards and imported packs are stored on this device. There is no sign-in, tracking, cloud sync or API key.", size=9, color=COLORS["muted"], background=COLORS["panel"], wrap=900, justify="left").pack(anchor="w", pady=(5, 10))
+        self._label(profile_content, "Local data & privacy", size=14, bold=True, background=self.colors["panel"]).pack(anchor="w")
+        self._label(profile_content, f"Profile file: {self.store.path}\nScores, flashcards and imported packs are stored on this device. There is no sign-in, tracking, cloud sync or API key.", size=9, color=self.colors["muted"], background=self.colors["panel"], wrap=900, justify="left").pack(anchor="w", pady=(5, 10))
         self._button(profile_content, "Reset all local progress", self._reset_progress).pack(anchor="w")
 
         update_card = self._card(page, padding=19)
         update_card.grid(row=5, column=0, sticky="ew", pady=(0, 13))
         update_content = update_card.content  # type: ignore[attr-defined]
-        self._label(update_content, "Install or update the Windows app", size=14, bold=True, background=COLORS["panel"]).pack(anchor="w")
-        self._label(update_content, "The latest setup updates the existing install using the same installer ID. Run it over the old version; your scores and flashcards stay in your user profile.", size=9, color=COLORS["muted"], background=COLORS["panel"], wrap=900).pack(anchor="w", pady=(5, 9))
+        self._label(update_content, "Install or update the Windows app", size=14, bold=True, background=self.colors["panel"]).pack(anchor="w")
+        self._label(update_content, "The latest setup updates the existing install using the same installer ID. Run it over the old version; your scores and flashcards stay in your user profile.", size=9, color=self.colors["muted"], background=self.colors["panel"], wrap=900).pack(anchor="w", pady=(5, 9))
         self._button(update_content, "Get latest installer", lambda: self._open_url(LATEST_RELEASE_URL), primary=True).pack(anchor="w")
 
-        self._label(page, "Question content is an original starter set for practice, not an official question bank or a past-paper archive. Practice helps identify gaps but cannot guarantee a score or selection.", size=8, color=COLORS["muted"], wrap=900).grid(row=6, column=0, sticky="w", pady=(0, 22))
+        self._label(page, "Question content is an original starter set for practice, not an official question bank or a past-paper archive. Practice helps identify gaps but cannot guarantee a score or selection.", size=8, color=self.colors["muted"], wrap=900).grid(row=6, column=0, sticky="w", pady=(0, 22))
 
     def _save_daily_goal(self, value: str) -> None:
         try:
@@ -1427,12 +1796,13 @@ class PSCCoachApp(tk.Tk):
         try:
             with open(path, "w", encoding="utf-8-sig", newline="") as output:
                 writer = csv.writer(output)
-                writer.writerow(("Question", "Answer", "Explanation", "Subject", "Topic", "Next review"))
+                writer.writerow(("Question", "Answer", "Explanation", "Memory hook", "Subject", "Topic", "Next review"))
                 for card in cards:
                     writer.writerow((
                         card.get("question", ""),
                         card.get("answer", ""),
                         card.get("explanation", ""),
+                        card.get("mnemonic", ""),
                         DOMAIN_LABELS.get(card.get("domain", ""), card.get("domain", "")),
                         card.get("topic", ""),
                         card.get("next_review", ""),

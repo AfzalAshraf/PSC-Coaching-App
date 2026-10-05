@@ -14,6 +14,7 @@
       },
       "answer": "A",
       "explanation": "Explain why the answer is correct and distinguish it from the distractors.",
+      "mnemonic": "Optional: add a short memory hook, acronym or story.",
       "source_hint": "Publisher or official URL; publication date: YYYY-MM-DD"
     }
   ]

@@ -225,6 +225,7 @@ def grade_session(
             "user_answer": user_answer,
             "was_correct": bool(is_correct),
             "explanation": question.get("explanation", ""),
+            "mnemonic": question.get("mnemonic", ""),
             "source_hint": question.get("source_hint", ""),
         })
 
@@ -335,6 +336,7 @@ def update_after_session(
             "question": question["question"],
             "answer": answer_text,
             "explanation": question.get("explanation", ""),
+            "mnemonic": question.get("mnemonic", ""),
             "options": dict(question["options"]),
             "domain": question["domain"],
             "topic": question.get("topic", ""),
