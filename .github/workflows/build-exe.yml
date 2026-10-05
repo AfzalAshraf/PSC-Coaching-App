@@ -30,12 +30,12 @@ permissions:
 jobs:
   test:
     name: Test the learning engine
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Check out source
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: "3.12"
       - name: Compile and run tests
@@ -49,9 +49,9 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Check out source
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: "3.12"
       - name: Install build tools
@@ -84,7 +84,7 @@ jobs:
           & $iscc "installer\KeralaPSCCoach.iss"
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - name: Upload downloadable Windows builds
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: KeralaPSC-Coach-Windows
           path: |
@@ -99,13 +99,13 @@ jobs:
     if: >-
       github.event_name != 'pull_request' &&
       (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/arena/01a106e9-psc-coaching-app')
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     concurrency:
       group: kerala-psc-coach-latest-release
       cancel-in-progress: false
     steps:
       - name: Download Windows builds
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: KeralaPSC-Coach-Windows
           path: release-assets
