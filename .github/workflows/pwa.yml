@@ -1,0 +1,82 @@
+name: PWA checks and deployment
+
+on:
+  push:
+    branches:
+      - main
+      - arena/01a106e9-psc-coaching-app
+    paths:
+      - "web/**"
+      - "run_web.py"
+      - "tools/export_web_data.py"
+      - "tests/test_web_export.py"
+      - ".github/workflows/pwa.yml"
+  pull_request:
+    paths:
+      - "web/**"
+      - "run_web.py"
+      - "tools/export_web_data.py"
+      - "tests/test_web_export.py"
+      - ".github/workflows/pwa.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Test PWA, adaptive coach and browser learning tools
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Verify exported syllabus and question bank
+        run: |
+          python tools/export_web_data.py
+          git diff --exit-code -- web/data/starter-bank.json
+      - name: Check browser JavaScript syntax
+        run: |
+          node --check web/js/app.js
+          node --check web/js/core.js
+          node --check web/js/math.js
+          node --check web/js/ai.js
+          node --check web/service-worker.js
+      - name: Run JavaScript learning tests
+        run: npm test --prefix web
+      - name: Run Python regression tests
+        run: |
+          python -m compileall -q PSCapp.pyw psc_coach tests run_web.py tools
+          python -m unittest discover -s tests -v
+
+  deploy:
+    name: Publish installable web app
+    if: github.event_name != 'pull_request'
+    needs: verify
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+      contents: read
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Upload the static PWA
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: web
+      - name: Deploy PWA to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
