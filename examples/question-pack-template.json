@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "questions": [
+    {
+      "id": "ca-2026-example-001",
+      "domain": "current_affairs",
+      "topic": "Example topic - add the month and year",
+      "question": "EXAMPLE ONLY: Replace this text with an original question about a recent, verified event.",
+      "options": {
+        "A": "Correct option",
+        "B": "Distractor one",
+        "C": "Distractor two",
+        "D": "Distractor three"
+      },
+      "answer": "A",
+      "explanation": "Explain why the answer is correct and distinguish it from the distractors.",
+      "mnemonic": "Optional: add a short memory hook, acronym or story.",
+      "source_hint": "Publisher or official URL; publication date: YYYY-MM-DD"
+    }
+  ]
+}

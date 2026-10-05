@@ -1,0 +1,3095 @@
+{
+  "schemaVersion": 1,
+  "domains": {
+    "history": "History",
+    "geography": "Geography",
+    "economics": "Economics",
+    "civics": "Civics & Public Administration",
+    "constitution": "Indian Constitution",
+    "arts": "Arts, Literature, Culture & Sports",
+    "biology": "Biology & Public Health",
+    "physics_chemistry": "Physics & Chemistry",
+    "science_technology": "Science & Technology",
+    "computer": "Computer Science & IT",
+    "current_affairs": "Current Affairs",
+    "quantitative": "Arithmetic & Mental Ability",
+    "english": "General English",
+    "malayalam": "Malayalam",
+    "tamil": "Tamil",
+    "kannada": "Kannada"
+  },
+  "tracks": {
+    "10th": {
+      "id": "10th",
+      "name": "10th Level / LDC",
+      "shortName": "10th Level",
+      "description": "Common preliminary foundation for LDC and other posts accepting 10th-level qualifications. Build Kerala and Indian GK, science, arithmetic and mental ability.",
+      "durationMinutes": 75,
+      "weights": {
+        "knowledge": 60,
+        "science": 20,
+        "quantitative": 20
+      },
+      "domainToBucket": {
+        "history": "knowledge",
+        "geography": "knowledge",
+        "economics": "knowledge",
+        "civics": "knowledge",
+        "constitution": "knowledge",
+        "arts": "knowledge",
+        "current_affairs": "knowledge",
+        "biology": "science",
+        "physics_chemistry": "science",
+        "science_technology": "science",
+        "quantitative": "quantitative"
+      },
+      "bucketLabels": {
+        "knowledge": "General Knowledge, Current Affairs & Kerala Renaissance",
+        "science": "General Science",
+        "quantitative": "Simple Arithmetic & Mental Ability"
+      },
+      "officialUrl": "https://www.keralapsc.gov.in/sites/default/files/inline-files/10th_level.pdf",
+      "syllabusNote": "The official 10th-level common preliminary syllabus allocates 60 marks to General Knowledge, Current Affairs and Renaissance in Kerala, 20 to General Science, and 20 to Simple Arithmetic and Mental Ability. Post-specific LDC tests may add other topics.",
+      "availableDomains": [
+        "history",
+        "geography",
+        "economics",
+        "civics",
+        "constitution",
+        "arts",
+        "biology",
+        "physics_chemistry",
+        "science_technology",
+        "computer",
+        "current_affairs",
+        "quantitative",
+        "english",
+        "malayalam",
+        "tamil",
+        "kannada"
+      ]
+    },
+    "plus_two": {
+      "id": "plus_two",
+      "name": "Plus Two Level",
+      "shortName": "Plus Two",
+      "description": "Common preliminary practice across history, geography, civics, economics, constitution, sciences, computer science, languages and aptitude.",
+      "durationMinutes": 75,
+      "weights": {
+        "history": 5,
+        "geography": 5,
+        "civics": 5,
+        "economics": 5,
+        "constitution": 5,
+        "biology": 5,
+        "physics_chemistry": 5,
+        "computer": 5,
+        "arts": 5,
+        "current_affairs": 5,
+        "quantitative": 20,
+        "english": 20,
+        "regional_language": 10
+      },
+      "domainToBucket": {
+        "history": "history",
+        "geography": "geography",
+        "civics": "civics",
+        "economics": "economics",
+        "constitution": "constitution",
+        "biology": "biology",
+        "physics_chemistry": "physics_chemistry",
+        "science_technology": "physics_chemistry",
+        "computer": "computer",
+        "arts": "arts",
+        "current_affairs": "current_affairs",
+        "quantitative": "quantitative",
+        "english": "english",
+        "malayalam": "regional_language",
+        "tamil": "regional_language",
+        "kannada": "regional_language"
+      },
+      "bucketLabels": {
+        "history": "History",
+        "geography": "Geography",
+        "civics": "Civics & Public Administration",
+        "economics": "Economics",
+        "constitution": "Indian Constitution",
+        "biology": "Biology",
+        "physics_chemistry": "Physics & Chemistry",
+        "computer": "Computer Science",
+        "arts": "Arts, Sports & Literature",
+        "current_affairs": "Current Affairs",
+        "quantitative": "Simple Arithmetic & Mental Ability",
+        "english": "General English",
+        "regional_language": "Regional Language"
+      },
+      "officialUrl": "https://www.keralapsc.gov.in/sites/default/files/inline-files/syllabus_plus_two_level_preliminary_exam_2022.pdf",
+      "syllabusNote": "The linked Kerala PSC Plus Two common preliminary syllabus shows the mark split used here. Check the notification for the post and exam cycle you are applying for.",
+      "availableDomains": [
+        "history",
+        "geography",
+        "economics",
+        "civics",
+        "constitution",
+        "arts",
+        "biology",
+        "physics_chemistry",
+        "science_technology",
+        "computer",
+        "current_affairs",
+        "quantitative",
+        "english",
+        "malayalam",
+        "tamil",
+        "kannada"
+      ]
+    },
+    "degree": {
+      "id": "degree",
+      "name": "Degree Level",
+      "shortName": "Degree",
+      "description": "Degree-level common preliminary foundation with larger shares for arithmetic, reasoning and English, plus general knowledge and language.",
+      "durationMinutes": 75,
+      "weights": {
+        "history": 10,
+        "geography": 5,
+        "economics": 5,
+        "civics": 5,
+        "constitution": 5,
+        "arts": 10,
+        "computer": 5,
+        "science_technology": 5,
+        "quantitative": 20,
+        "english": 20,
+        "regional_language": 10
+      },
+      "domainToBucket": {
+        "history": "history",
+        "geography": "geography",
+        "economics": "economics",
+        "civics": "civics",
+        "constitution": "constitution",
+        "arts": "arts",
+        "computer": "computer",
+        "biology": "science_technology",
+        "physics_chemistry": "science_technology",
+        "science_technology": "science_technology",
+        "current_affairs": "arts",
+        "quantitative": "quantitative",
+        "english": "english",
+        "malayalam": "regional_language",
+        "tamil": "regional_language",
+        "kannada": "regional_language"
+      },
+      "bucketLabels": {
+        "history": "History",
+        "geography": "Geography",
+        "economics": "Economics",
+        "civics": "Civics",
+        "constitution": "Indian Constitution",
+        "arts": "Arts, Literature, Culture & Sports",
+        "computer": "Basics of Computer",
+        "science_technology": "Science & Technology",
+        "quantitative": "Simple Arithmetic, Mental Ability & Reasoning",
+        "english": "General English",
+        "regional_language": "Regional Language"
+      },
+      "officialUrl": "https://www.keralapsc.gov.in/sites/default/files/2025-01/degree_level_preliminary_revised_latest_.pdf",
+      "syllabusNote": "Based on the revised Degree Level Common Preliminary syllabus and mark distribution published by Kerala PSC in 2025. Check the current post notification for the official syllabus.",
+      "availableDomains": [
+        "history",
+        "geography",
+        "economics",
+        "civics",
+        "constitution",
+        "arts",
+        "biology",
+        "physics_chemistry",
+        "science_technology",
+        "computer",
+        "current_affairs",
+        "quantitative",
+        "english",
+        "malayalam",
+        "tamil",
+        "kannada"
+      ]
+    }
+  },
+  "questions": [
+    {
+      "id": "hist-001",
+      "domain": "history",
+      "topic": "Kerala Renaissance",
+      "question": "The Vaikom Satyagraha began in which year?",
+      "options": {
+        "A": "1924",
+        "B": "1916",
+        "C": "1930",
+        "D": "1936"
+      },
+      "answer": "A",
+      "explanation": "The Vaikom Satyagraha began in 1924 and challenged restrictions on access to roads around the Vaikom temple.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "hist-002",
+      "domain": "history",
+      "topic": "Kerala Renaissance",
+      "question": "The Temple Entry Proclamation of Travancore was issued in 1936 by whom?",
+      "options": {
+        "A": "Maharaja Chithira Thirunal Balarama Varma",
+        "B": "Marthanda Varma",
+        "C": "Swathi Thirunal",
+        "D": "Rama Varma XV"
+      },
+      "answer": "A",
+      "explanation": "The proclamation was issued by the Travancore ruler Chithira Thirunal on 12 November 1936.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "hist-003",
+      "domain": "history",
+      "topic": "Kerala Renaissance",
+      "question": "Sree Narayana Guru's Aruvippuram consecration took place in which year?",
+      "options": {
+        "A": "1888",
+        "B": "1857",
+        "C": "1891",
+        "D": "1903"
+      },
+      "answer": "A",
+      "explanation": "In 1888, Sree Narayana Guru consecrated a Shiva idol at Aruvippuram, a landmark in the Kerala renaissance.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "hist-004",
+      "domain": "history",
+      "topic": "Kerala Renaissance",
+      "question": "Who founded the Sadhu Jana Paripalana Sangham?",
+      "options": {
+        "A": "Ayyankali",
+        "B": "Chattampi Swamikal",
+        "C": "Mannathu Padmanabhan",
+        "D": "Vakkom Moulavi"
+      },
+      "answer": "A",
+      "explanation": "Ayyankali organised the Sadhu Jana Paripalana Sangham to advance the rights and education of oppressed communities.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "hist-005",
+      "domain": "history",
+      "topic": "Kerala Renaissance",
+      "question": "The Sree Narayana Dharma Paripalana Yogam (SNDP Yogam) was established in which year?",
+      "options": {
+        "A": "1903",
+        "B": "1888",
+        "C": "1914",
+        "D": "1924"
+      },
+      "answer": "A",
+      "explanation": "The SNDP Yogam was formed in 1903, drawing inspiration from Sree Narayana Guru's social reform work.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "hist-006",
+      "domain": "history",
+      "topic": "Kerala Renaissance",
+      "question": "Who founded the Nair Service Society (NSS)?",
+      "options": {
+        "A": "Mannathu Padmanabhan",
+        "B": "Ayyankali",
+        "C": "Kumaran Asan",
+        "D": "Vallathol Narayana Menon"
+      },
+      "answer": "A",
+      "explanation": "Mannathu Padmanabhan founded the NSS in 1914 as a community organisation.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "hist-007",
+      "domain": "history",
+      "topic": "Kerala History",
+      "question": "Kerala state was formed on 1 November in which year?",
+      "options": {
+        "A": "1956",
+        "B": "1947",
+        "C": "1950",
+        "D": "1960"
+      },
+      "answer": "A",
+      "explanation": "Kerala was formed on 1 November 1956 during the reorganisation of Indian states.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "hist-008",
+      "domain": "history",
+      "topic": "Kerala History",
+      "question": "The Malabar Rebellion took place in which year?",
+      "options": {
+        "A": "1921",
+        "B": "1905",
+        "C": "1919",
+        "D": "1931"
+      },
+      "answer": "A",
+      "explanation": "The Malabar Rebellion occurred in 1921 in the Malabar region; study its causes and context alongside the freedom movement.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "hist-009",
+      "domain": "history",
+      "topic": "Kerala Literature",
+      "question": "Who wrote the Malayalam novel Indulekha?",
+      "options": {
+        "A": "O. Chandu Menon",
+        "B": "C. V. Raman Pillai",
+        "C": "Thakazhi Sivasankara Pillai",
+        "D": "Vaikom Muhammad Basheer"
+      },
+      "answer": "A",
+      "explanation": "O. Chandu Menon's Indulekha, published in 1889, is widely recognised as the first major Malayalam novel.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "hist-010",
+      "domain": "history",
+      "topic": "Indian National Movement",
+      "question": "The Indian National Congress was founded in which year?",
+      "options": {
+        "A": "1885",
+        "B": "1857",
+        "C": "1905",
+        "D": "1919"
+      },
+      "answer": "A",
+      "explanation": "The Indian National Congress was founded in 1885; its first session met in Bombay.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "hist-011",
+      "domain": "history",
+      "topic": "Indian National Movement",
+      "question": "Who presided over the first session of the Indian National Congress?",
+      "options": {
+        "A": "Womesh Chandra Bonnerjee",
+        "B": "Dadabhai Naoroji",
+        "C": "Gopal Krishna Gokhale",
+        "D": "Bal Gangadhar Tilak"
+      },
+      "answer": "A",
+      "explanation": "W. C. Bonnerjee presided over the first INC session in Bombay in 1885.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "hist-012",
+      "domain": "history",
+      "topic": "Indian National Movement",
+      "question": "The Quit India Movement was launched in which year?",
+      "options": {
+        "A": "1942",
+        "B": "1919",
+        "C": "1920",
+        "D": "1930"
+      },
+      "answer": "A",
+      "explanation": "The Quit India Movement was launched in August 1942, during the Second World War.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "hist-013",
+      "domain": "history",
+      "topic": "Indian National Movement",
+      "question": "Mahatma Gandhi's Salt March to Dandi took place in which year?",
+      "options": {
+        "A": "1930",
+        "B": "1920",
+        "C": "1924",
+        "D": "1942"
+      },
+      "answer": "A",
+      "explanation": "Gandhi's Salt March began in March 1930 as a protest against the British salt laws.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "hist-014",
+      "domain": "history",
+      "topic": "Indian National Movement",
+      "question": "The uprising commonly called the Revolt of 1857 first spread from which garrison town?",
+      "options": {
+        "A": "Meerut",
+        "B": "Bombay",
+        "C": "Madras",
+        "D": "Calcutta"
+      },
+      "answer": "A",
+      "explanation": "The large uprising of 1857 began at Meerut before spreading to other parts of north India.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "hist-015",
+      "domain": "history",
+      "topic": "World History",
+      "question": "The French Revolution began in which year?",
+      "options": {
+        "A": "1789",
+        "B": "1688",
+        "C": "1776",
+        "D": "1848"
+      },
+      "answer": "A",
+      "explanation": "The French Revolution began in 1789 and transformed France's political and social order.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "hist-016",
+      "domain": "history",
+      "topic": "Kerala Renaissance",
+      "question": "Who is associated with the slogan 'One caste, one religion, one God for humankind'?",
+      "options": {
+        "A": "Sree Narayana Guru",
+        "B": "Ayyankali",
+        "C": "Chattampi Swamikal",
+        "D": "Mannathu Padmanabhan"
+      },
+      "answer": "A",
+      "explanation": "The slogan is associated with Sree Narayana Guru's message of social equality and human dignity.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "hist-017",
+      "domain": "history",
+      "topic": "Indian National Movement",
+      "question": "The first session of the Indian National Congress was held in which city?",
+      "options": {
+        "A": "Bombay (Mumbai)",
+        "B": "Calcutta (Kolkata)",
+        "C": "Madras (Chennai)",
+        "D": "Allahabad (Prayagraj)"
+      },
+      "answer": "A",
+      "explanation": "The first INC session was held in Bombay in December 1885.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "hist-018",
+      "domain": "history",
+      "topic": "Kerala History",
+      "question": "Pazhassi Raja is especially remembered for resisting which power in Malabar?",
+      "options": {
+        "A": "The British East India Company",
+        "B": "The Portuguese Estado da Índia",
+        "C": "The French East India Company",
+        "D": "The Dutch East India Company"
+      },
+      "answer": "A",
+      "explanation": "Pazhassi Raja led resistance against the expanding authority of the British East India Company in Malabar.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "geo-001",
+      "domain": "geography",
+      "topic": "Kerala Geography",
+      "question": "What is the highest peak in Kerala and peninsular India?",
+      "options": {
+        "A": "Anamudi",
+        "B": "Agastya Mala",
+        "C": "Doddabetta",
+        "D": "Chembra Peak"
+      },
+      "answer": "A",
+      "explanation": "Anamudi, in the Western Ghats, is the highest peak in Kerala and peninsular India.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "geo-002",
+      "domain": "geography",
+      "topic": "Kerala Geography",
+      "question": "Which is the longest river that flows entirely within Kerala?",
+      "options": {
+        "A": "Periyar",
+        "B": "Bharathappuzha",
+        "C": "Pamba",
+        "D": "Chaliyar"
+      },
+      "answer": "A",
+      "explanation": "The Periyar is Kerala's longest river; standard references give its length as about 244 km.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "geo-003",
+      "domain": "geography",
+      "topic": "Kerala Geography",
+      "question": "Which is the largest lake in Kerala?",
+      "options": {
+        "A": "Vembanad Lake",
+        "B": "Ashtamudi Lake",
+        "C": "Sasthamkotta Lake",
+        "D": "Pookode Lake"
+      },
+      "answer": "A",
+      "explanation": "Vembanad is the largest lake in Kerala and forms part of the state's extensive backwater system.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "geo-004",
+      "domain": "geography",
+      "topic": "Kerala Geography",
+      "question": "Which sea lies to the west of Kerala?",
+      "options": {
+        "A": "Arabian Sea",
+        "B": "Bay of Bengal",
+        "C": "Red Sea",
+        "D": "Andaman Sea"
+      },
+      "answer": "A",
+      "explanation": "Kerala is on India's southwestern coast, facing the Arabian Sea.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "geo-005",
+      "domain": "geography",
+      "topic": "Kerala Geography",
+      "question": "The Palakkad Gap is a low pass through which mountain range?",
+      "options": {
+        "A": "Western Ghats",
+        "B": "Eastern Ghats",
+        "C": "Aravalli Range",
+        "D": "Himalayas"
+      },
+      "answer": "A",
+      "explanation": "The Palakkad Gap is a low pass in the Western Ghats that links central Kerala with the Coimbatore region.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "geo-006",
+      "domain": "geography",
+      "topic": "Kerala Geography",
+      "question": "How many revenue districts does Kerala have?",
+      "options": {
+        "A": "14",
+        "B": "12",
+        "C": "13",
+        "D": "15"
+      },
+      "answer": "A",
+      "explanation": "Kerala has 14 districts. Check official state sources for any future administrative changes.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "geo-007",
+      "domain": "geography",
+      "topic": "Kerala Geography",
+      "question": "Kuttanad is well known for farming that takes place partly below what level?",
+      "options": {
+        "A": "Sea level",
+        "B": "The tree line",
+        "C": "The Tropic of Cancer",
+        "D": "The continental shelf"
+      },
+      "answer": "A",
+      "explanation": "Parts of Kuttanad are cultivated below sea level, a distinctive feature of the region's farming system.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "geo-008",
+      "domain": "geography",
+      "topic": "Kerala Geography",
+      "question": "Silent Valley National Park is in which Kerala district?",
+      "options": {
+        "A": "Palakkad",
+        "B": "Kollam",
+        "C": "Kannur",
+        "D": "Alappuzha"
+      },
+      "answer": "A",
+      "explanation": "Silent Valley National Park lies in Palakkad district and protects tropical evergreen forest in the Nilgiri region.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "geo-009",
+      "domain": "geography",
+      "topic": "Indian Geography",
+      "question": "What is the standard meridian of India?",
+      "options": {
+        "A": "82°30′ east longitude",
+        "B": "75°30′ east longitude",
+        "C": "90° east longitude",
+        "D": "68°7′ east longitude"
+      },
+      "answer": "A",
+      "explanation": "India's standard meridian is 82°30′ E, used to define Indian Standard Time.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "geo-010",
+      "domain": "geography",
+      "topic": "Indian Geography",
+      "question": "Which Indian state has the largest area?",
+      "options": {
+        "A": "Rajasthan",
+        "B": "Madhya Pradesh",
+        "C": "Maharashtra",
+        "D": "Uttar Pradesh"
+      },
+      "answer": "A",
+      "explanation": "Rajasthan is India's largest state by area.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "geo-011",
+      "domain": "geography",
+      "topic": "Indian Geography",
+      "question": "The Western Ghats run broadly parallel to which Indian coastline?",
+      "options": {
+        "A": "The western coast",
+        "B": "The eastern coast",
+        "C": "The northern coast",
+        "D": "The coast of Odisha only"
+      },
+      "answer": "A",
+      "explanation": "The Western Ghats extend roughly parallel to India's western coast.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "geo-012",
+      "domain": "geography",
+      "topic": "Physical Geography",
+      "question": "Which instrument records earthquake ground motion?",
+      "options": {
+        "A": "Seismograph",
+        "B": "Barometer",
+        "C": "Anemometer",
+        "D": "Hygrometer"
+      },
+      "answer": "A",
+      "explanation": "A seismograph records ground motion generated by earthquakes; a seismogram is its recorded trace.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "eco-001",
+      "domain": "economics",
+      "topic": "Indian Economy",
+      "question": "What does GDP measure?",
+      "options": {
+        "A": "The value of final goods and services produced within an economy during a period",
+        "B": "Only the government's annual tax collection",
+        "C": "The value of exports alone",
+        "D": "The total population of a country"
+      },
+      "answer": "A",
+      "explanation": "Gross Domestic Product measures the market value of final goods and services produced within a territory over a specified period.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "eco-002",
+      "domain": "economics",
+      "topic": "Indian Economy",
+      "question": "Inflation is best described as a sustained rise in what?",
+      "options": {
+        "A": "The general price level",
+        "B": "The literacy rate",
+        "C": "The value of exports only",
+        "D": "The number of banks"
+      },
+      "answer": "A",
+      "explanation": "Inflation is a sustained increase in the general price level, which reduces the purchasing power of money.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "eco-003",
+      "domain": "economics",
+      "topic": "Indian Economy",
+      "question": "Which institution is India's central bank?",
+      "options": {
+        "A": "Reserve Bank of India",
+        "B": "NITI Aayog",
+        "C": "Securities and Exchange Board of India",
+        "D": "National Bank for Agriculture and Rural Development"
+      },
+      "answer": "A",
+      "explanation": "The Reserve Bank of India is the country's central bank and conducts monetary policy.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "eco-004",
+      "domain": "economics",
+      "topic": "Indian Economy",
+      "question": "Which of these is a direct tax in India?",
+      "options": {
+        "A": "Personal income tax",
+        "B": "Goods and Services Tax",
+        "C": "Customs duty",
+        "D": "Excise duty"
+      },
+      "answer": "A",
+      "explanation": "Personal income tax is levied directly on the income of a taxpayer; GST and customs duty are indirect taxes.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "eco-005",
+      "domain": "economics",
+      "topic": "Indian Economy",
+      "question": "NITI Aayog replaced which institution in 2015?",
+      "options": {
+        "A": "Planning Commission",
+        "B": "Finance Commission",
+        "C": "Election Commission of India",
+        "D": "Reserve Bank of India"
+      },
+      "answer": "A",
+      "explanation": "NITI Aayog was established in 2015 to replace the Planning Commission.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "eco-006",
+      "domain": "economics",
+      "topic": "Indian Economy",
+      "question": "The Goods and Services Tax was introduced across India on which date?",
+      "options": {
+        "A": "1 July 2017",
+        "B": "1 January 2015",
+        "C": "15 August 2016",
+        "D": "26 January 2018"
+      },
+      "answer": "A",
+      "explanation": "GST was rolled out in India on 1 July 2017. Specific tax rules can change, so use current official material for updates.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "eco-007",
+      "domain": "economics",
+      "topic": "Indian Economy",
+      "question": "A government's fiscal policy mainly concerns decisions about what?",
+      "options": {
+        "A": "Public revenue and expenditure",
+        "B": "The daily weather forecast",
+        "C": "The location of district boundaries",
+        "D": "The curriculum of universities"
+      },
+      "answer": "A",
+      "explanation": "Fiscal policy uses government revenue, taxation and expenditure to influence the economy.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "eco-008",
+      "domain": "economics",
+      "topic": "Indian Economy",
+      "question": "The repo rate is the rate at which which institution lends short-term funds to banks?",
+      "options": {
+        "A": "Reserve Bank of India",
+        "B": "NITI Aayog",
+        "C": "Election Commission of India",
+        "D": "Comptroller and Auditor General of India"
+      },
+      "answer": "A",
+      "explanation": "The repo rate is the policy rate at which the RBI lends funds to eligible banks against approved securities.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "civ-001",
+      "domain": "civics",
+      "topic": "Governance",
+      "question": "The Right to Information Act in India was enacted in which year?",
+      "options": {
+        "A": "2005",
+        "B": "1991",
+        "C": "1998",
+        "D": "2013"
+      },
+      "answer": "A",
+      "explanation": "The Right to Information Act, 2005 provides a framework for citizens to request information from public authorities, subject to its provisions and exemptions.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "civ-002",
+      "domain": "civics",
+      "topic": "Governance",
+      "question": "Who directly elects members of the Lok Sabha?",
+      "options": {
+        "A": "The electorate in the constituencies",
+        "B": "The President of India",
+        "C": "The Supreme Court",
+        "D": "The State Legislative Councils"
+      },
+      "answer": "A",
+      "explanation": "Lok Sabha members are directly elected by voters in parliamentary constituencies.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "civ-003",
+      "domain": "civics",
+      "topic": "Local Self-Government",
+      "question": "A Gram Sabha consists of which people?",
+      "options": {
+        "A": "People registered on the electoral rolls of the village panchayat area",
+        "B": "Only elected panchayat members",
+        "C": "All government employees in the district",
+        "D": "Only the heads of village households"
+      },
+      "answer": "A",
+      "explanation": "The Gram Sabha is the body of registered voters in the area of a village panchayat, as defined by law.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "civ-004",
+      "domain": "civics",
+      "topic": "Elections",
+      "question": "Which body conducts elections to Parliament and State Legislatures in India?",
+      "options": {
+        "A": "Election Commission of India",
+        "B": "Union Public Service Commission",
+        "C": "Finance Commission",
+        "D": "Comptroller and Auditor General of India"
+      },
+      "answer": "A",
+      "explanation": "The Election Commission of India supervises elections to Parliament, State Legislatures, and the offices of President and Vice-President.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "civ-005",
+      "domain": "civics",
+      "topic": "Public Administration",
+      "question": "Public administration is primarily concerned with what?",
+      "options": {
+        "A": "Implementing public policies and delivering public services",
+        "B": "Setting private retail prices",
+        "C": "Conducting only court trials",
+        "D": "Managing international sports teams"
+      },
+      "answer": "A",
+      "explanation": "Public administration translates laws and public policies into programmes and services.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "civ-006",
+      "domain": "civics",
+      "topic": "Governance",
+      "question": "A State Lokayukta institution is generally associated with investigating what?",
+      "options": {
+        "A": "Allegations of maladministration or corruption within its legal jurisdiction",
+        "B": "Private family disputes only",
+        "C": "International border disputes",
+        "D": "University examination timetables"
+      },
+      "answer": "A",
+      "explanation": "Lokayukta powers and procedures are defined by the relevant state law; the institution generally addresses complaints about public functionaries.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "civ-007",
+      "domain": "civics",
+      "topic": "Courts",
+      "question": "Which is the highest court in India's judicial system?",
+      "options": {
+        "A": "Supreme Court of India",
+        "B": "A District Court",
+        "C": "A Gram Nyayalaya",
+        "D": "A Consumer Commission"
+      },
+      "answer": "A",
+      "explanation": "The Supreme Court of India is the apex court in the country's judicial hierarchy.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "civ-008",
+      "domain": "civics",
+      "topic": "Public Administration",
+      "question": "E-governance uses information and communication technology mainly to improve what?",
+      "options": {
+        "A": "Access to and delivery of public services and information",
+        "B": "The number of paper forms required",
+        "C": "The distance between villages",
+        "D": "The rate of rainfall"
+      },
+      "answer": "A",
+      "explanation": "E-governance uses digital systems to make public information and services more accessible and efficient.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "con-001",
+      "domain": "constitution",
+      "topic": "Constitution Basics",
+      "question": "The Constitution of India was adopted on which date?",
+      "options": {
+        "A": "26 November 1949",
+        "B": "15 August 1947",
+        "C": "26 January 1950",
+        "D": "2 October 1950"
+      },
+      "answer": "A",
+      "explanation": "The Constituent Assembly adopted the Constitution on 26 November 1949; it came into force on 26 January 1950.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "con-002",
+      "domain": "constitution",
+      "topic": "Constitution Basics",
+      "question": "The Constitution of India came into force on which date?",
+      "options": {
+        "A": "26 January 1950",
+        "B": "26 November 1949",
+        "C": "15 August 1947",
+        "D": "1 November 1956"
+      },
+      "answer": "A",
+      "explanation": "The Constitution came into force on 26 January 1950, celebrated as Republic Day.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "con-003",
+      "domain": "constitution",
+      "topic": "Fundamental Rights",
+      "question": "Fundamental Rights are primarily set out in which Part of the Constitution?",
+      "options": {
+        "A": "Part III",
+        "B": "Part I",
+        "C": "Part IV",
+        "D": "Part V"
+      },
+      "answer": "A",
+      "explanation": "Part III of the Constitution contains the Fundamental Rights.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "con-004",
+      "domain": "constitution",
+      "topic": "Directive Principles",
+      "question": "Directive Principles of State Policy are primarily contained in which Part?",
+      "options": {
+        "A": "Part IV",
+        "B": "Part II",
+        "C": "Part III",
+        "D": "Part VI"
+      },
+      "answer": "A",
+      "explanation": "Part IV contains the Directive Principles of State Policy; they guide governance and are not enforceable by courts in the same way as Fundamental Rights.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "con-005",
+      "domain": "constitution",
+      "topic": "Fundamental Duties",
+      "question": "Fundamental Duties are listed in which Part of the Constitution?",
+      "options": {
+        "A": "Part IVA",
+        "B": "Part II",
+        "C": "Part III",
+        "D": "Part V"
+      },
+      "answer": "A",
+      "explanation": "Fundamental Duties are set out in Part IVA; Article 51A was added by the 42nd Amendment.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "con-006",
+      "domain": "constitution",
+      "topic": "Constitutional Articles",
+      "question": "Article 14 guarantees which constitutional principle?",
+      "options": {
+        "A": "Equality before the law and equal protection of the laws",
+        "B": "Freedom of religion only",
+        "C": "A right to property as a Fundamental Right",
+        "D": "The procedure for amending the Constitution"
+      },
+      "answer": "A",
+      "explanation": "Article 14 guarantees equality before the law and equal protection of the laws.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "con-007",
+      "domain": "constitution",
+      "topic": "Constitutional Articles",
+      "question": "Article 21 protects which right?",
+      "options": {
+        "A": "Protection of life and personal liberty",
+        "B": "The right to form a State",
+        "C": "The election of the Speaker",
+        "D": "The procedure for passing a Money Bill"
+      },
+      "answer": "A",
+      "explanation": "Article 21 states that no person shall be deprived of life or personal liberty except according to procedure established by law.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "con-008",
+      "domain": "constitution",
+      "topic": "Constitutional Articles",
+      "question": "Article 32 is associated with which remedy?",
+      "options": {
+        "A": "The right to move the Supreme Court for enforcement of Fundamental Rights",
+        "B": "The appointment of a Governor",
+        "C": "The creation of a new district",
+        "D": "The annual Union Budget"
+      },
+      "answer": "A",
+      "explanation": "Article 32 provides the right to approach the Supreme Court for enforcement of Fundamental Rights.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "con-009",
+      "domain": "constitution",
+      "topic": "Constitutional Schedules",
+      "question": "Which Schedule contains the Union, State and Concurrent Lists?",
+      "options": {
+        "A": "The Seventh Schedule",
+        "B": "The Fifth Schedule",
+        "C": "The Eighth Schedule",
+        "D": "The Tenth Schedule"
+      },
+      "answer": "A",
+      "explanation": "The Seventh Schedule distributes legislative subjects across the Union, State and Concurrent Lists.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "con-010",
+      "domain": "constitution",
+      "topic": "Constitutional Amendments",
+      "question": "Which Article sets out the constitutional amendment procedure?",
+      "options": {
+        "A": "Article 368",
+        "B": "Article 14",
+        "C": "Article 21",
+        "D": "Article 280"
+      },
+      "answer": "A",
+      "explanation": "Article 368 provides the procedure for amending the Constitution, with requirements that vary by the amendment's subject.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "con-011",
+      "domain": "constitution",
+      "topic": "Local Self-Government",
+      "question": "The 73rd Constitutional Amendment is primarily associated with which institution?",
+      "options": {
+        "A": "Panchayati Raj institutions",
+        "B": "The Election Commission of India",
+        "C": "The Supreme Court",
+        "D": "The Finance Commission"
+      },
+      "answer": "A",
+      "explanation": "The 73rd Amendment gave constitutional recognition to Panchayati Raj institutions.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "con-012",
+      "domain": "constitution",
+      "topic": "Constitutional Institutions",
+      "question": "Which Article provides for a Finance Commission at the Union level?",
+      "options": {
+        "A": "Article 280",
+        "B": "Article 14",
+        "C": "Article 32",
+        "D": "Article 368"
+      },
+      "answer": "A",
+      "explanation": "Article 280 provides for the constitution of a Finance Commission by the President, normally every five years or earlier.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "art-001",
+      "domain": "arts",
+      "topic": "Kerala Performing Arts",
+      "question": "Kathakali is a traditional performing art associated with which state?",
+      "options": {
+        "A": "Kerala",
+        "B": "Punjab",
+        "C": "Assam",
+        "D": "Gujarat"
+      },
+      "answer": "A",
+      "explanation": "Kathakali is a classical dance-drama tradition of Kerala, known for stylised gesture, music and elaborate make-up.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "art-002",
+      "domain": "arts",
+      "topic": "Kerala Performing Arts",
+      "question": "Mohiniyattam is a classical dance form associated with which state?",
+      "options": {
+        "A": "Kerala",
+        "B": "Odisha",
+        "C": "Manipur",
+        "D": "Rajasthan"
+      },
+      "answer": "A",
+      "explanation": "Mohiniyattam is a classical dance form that developed in Kerala.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "art-003",
+      "domain": "arts",
+      "topic": "Kerala Performing Arts",
+      "question": "Who is credited with creating Ottan Thullal?",
+      "options": {
+        "A": "Kunchan Nambiar",
+        "B": "Unnayi Warrier",
+        "C": "Vallathol Narayana Menon",
+        "D": "Kumaran Asan"
+      },
+      "answer": "A",
+      "explanation": "Poet Kunchan Nambiar created Ottan Thullal, a Malayalam performance tradition using satire and verse.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "art-004",
+      "domain": "arts",
+      "topic": "Kerala Institutions",
+      "question": "Who was a principal founder of Kerala Kalamandalam?",
+      "options": {
+        "A": "Vallathol Narayana Menon",
+        "B": "O. Chandu Menon",
+        "C": "Sree Narayana Guru",
+        "D": "Kumaran Asan"
+      },
+      "answer": "A",
+      "explanation": "Vallathol Narayana Menon was central to founding Kerala Kalamandalam in 1930 to support classical arts.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "art-005",
+      "domain": "arts",
+      "topic": "Malayalam Literature",
+      "question": "Who was the first Malayalam-language recipient of the Jnanpith Award?",
+      "options": {
+        "A": "G. Sankara Kurup",
+        "B": "Thakazhi Sivasankara Pillai",
+        "C": "S. K. Pottekkatt",
+        "D": "M. T. Vasudevan Nair"
+      },
+      "answer": "A",
+      "explanation": "G. Sankara Kurup received the first Jnanpith Award for Malayalam in 1965.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "art-006",
+      "domain": "arts",
+      "topic": "Malayalam Literature",
+      "question": "Who wrote the novel Chemmeen?",
+      "options": {
+        "A": "Thakazhi Sivasankara Pillai",
+        "B": "Vaikom Muhammad Basheer",
+        "C": "O. V. Vijayan",
+        "D": "Kumaran Asan"
+      },
+      "answer": "A",
+      "explanation": "Chemmeen is a celebrated Malayalam novel by Thakazhi Sivasankara Pillai.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "art-007",
+      "domain": "arts",
+      "topic": "Malayalam Literature",
+      "question": "Who wrote Balyakalasakhi?",
+      "options": {
+        "A": "Vaikom Muhammad Basheer",
+        "B": "O. Chandu Menon",
+        "C": "C. V. Raman Pillai",
+        "D": "Vallathol Narayana Menon"
+      },
+      "answer": "A",
+      "explanation": "Balyakalasakhi is a well-known Malayalam novel by Vaikom Muhammad Basheer.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "art-008",
+      "domain": "arts",
+      "topic": "Kerala Culture",
+      "question": "The traditional ritual art form Theyyam is especially associated with which part of Kerala?",
+      "options": {
+        "A": "North Malabar",
+        "B": "The Kuttanad region",
+        "C": "The high ranges of Idukki only",
+        "D": "The Lakshadweep Islands"
+      },
+      "answer": "A",
+      "explanation": "Theyyam is a ritual performance tradition especially associated with North Malabar in Kerala.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "art-009",
+      "domain": "arts",
+      "topic": "Kerala Culture",
+      "question": "Kalaripayattu is best described as what?",
+      "options": {
+        "A": "A traditional martial art of Kerala",
+        "B": "A boat-building method",
+        "C": "A harvest song only",
+        "D": "A classical painting style"
+      },
+      "answer": "A",
+      "explanation": "Kalaripayattu is a traditional martial art associated with Kerala.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "art-010",
+      "domain": "arts",
+      "topic": "Kerala Culture",
+      "question": "Onam celebrations are traditionally linked in Kerala folklore with the return of which king?",
+      "options": {
+        "A": "Mahabali (Maveli)",
+        "B": "Ashoka",
+        "C": "Chandragupta Maurya",
+        "D": "Harsha"
+      },
+      "answer": "A",
+      "explanation": "Onam is linked in Kerala folklore with the annual return of the benevolent king Mahabali, also called Maveli.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "art-011",
+      "domain": "arts",
+      "topic": "Kerala Culture",
+      "question": "Vallam Kali refers to which activity?",
+      "options": {
+        "A": "Traditional boat races",
+        "B": "A harvest dance",
+        "C": "A temple mural technique",
+        "D": "A form of martial arts"
+      },
+      "answer": "A",
+      "explanation": "Vallam Kali is the traditional boat-racing culture of Kerala, including the famous snake-boat races.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "art-012",
+      "domain": "arts",
+      "topic": "Kerala Performing Arts",
+      "question": "Koodiyattam is a traditional form of which theatre?",
+      "options": {
+        "A": "Sanskrit theatre",
+        "B": "Persian opera",
+        "C": "Chinese shadow theatre",
+        "D": "Western musical theatre"
+      },
+      "answer": "A",
+      "explanation": "Koodiyattam is a Sanskrit theatre tradition of Kerala recognised by UNESCO as intangible cultural heritage.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "art-013",
+      "domain": "arts",
+      "topic": "Indian Literature",
+      "question": "The Jnanpith Award recognises outstanding contributions to which field?",
+      "options": {
+        "A": "Indian literature",
+        "B": "Agricultural science only",
+        "C": "Olympic sport only",
+        "D": "Architecture only"
+      },
+      "answer": "A",
+      "explanation": "The Jnanpith Award is a major Indian literary award.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "art-014",
+      "domain": "arts",
+      "topic": "Indian Sports",
+      "question": "Major Dhyan Chand is especially remembered for excellence in which sport?",
+      "options": {
+        "A": "Field hockey",
+        "B": "Cricket",
+        "C": "Tennis",
+        "D": "Wrestling"
+      },
+      "answer": "A",
+      "explanation": "Major Dhyan Chand was an iconic Indian field-hockey player, often called the Wizard of Hockey.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "art-015",
+      "domain": "arts",
+      "topic": "Indian Sports",
+      "question": "Who became the first Indian to win an individual Olympic gold medal?",
+      "options": {
+        "A": "Abhinav Bindra",
+        "B": "Leander Paes",
+        "C": "Milkha Singh",
+        "D": "P. T. Usha"
+      },
+      "answer": "A",
+      "explanation": "Abhinav Bindra won India's first individual Olympic gold medal in the men's 10-metre air rifle event at Beijing 2008.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "art-016",
+      "domain": "arts",
+      "topic": "Indian Sports",
+      "question": "How many players from one team are on the field in association football under the standard Laws of the Game?",
+      "options": {
+        "A": "11",
+        "B": "7",
+        "C": "9",
+        "D": "15"
+      },
+      "answer": "A",
+      "explanation": "A standard association-football team has eleven players on the field, including the goalkeeper.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "art-017",
+      "domain": "arts",
+      "topic": "Olympic Movement",
+      "question": "The Olympic symbol consists of how many interlaced rings?",
+      "options": {
+        "A": "Five",
+        "B": "Three",
+        "C": "Four",
+        "D": "Seven"
+      },
+      "answer": "A",
+      "explanation": "The Olympic symbol has five interlaced rings representing the union of the Olympic movement's continents; the colours are not assigned one-to-one to continents.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "art-018",
+      "domain": "arts",
+      "topic": "Olympic Movement",
+      "question": "The first modern Olympic Games were held in which city in 1896?",
+      "options": {
+        "A": "Athens",
+        "B": "Paris",
+        "C": "London",
+        "D": "Rome"
+      },
+      "answer": "A",
+      "explanation": "The first modern Olympic Games were held in Athens in 1896.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "math-001",
+      "domain": "quantitative",
+      "topic": "Number Series",
+      "question": "What is the next number in the series 3, 6, 12, 24, ___?",
+      "options": {
+        "A": "48",
+        "B": "36",
+        "C": "42",
+        "D": "54"
+      },
+      "answer": "A",
+      "explanation": "Each term is doubled: 24 × 2 = 48.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "math-002",
+      "domain": "quantitative",
+      "topic": "Analogy",
+      "question": "Complete the number analogy: 3 is to 9 as 5 is to ___.",
+      "options": {
+        "A": "25",
+        "B": "10",
+        "C": "15",
+        "D": "20"
+      },
+      "answer": "A",
+      "explanation": "The first number is squared: 3² = 9, so 5² = 25.",
+      "mnemonic": "Look for the same operation on both sides: 3 × 3, then 5 × 5.",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "math-003",
+      "domain": "quantitative",
+      "topic": "Family Relations",
+      "question": "Maya is Nikhil's sister. Nikhil is Anu's father. How is Maya related to Anu?",
+      "options": {
+        "A": "Paternal aunt",
+        "B": "Maternal aunt",
+        "C": "Cousin",
+        "D": "Grandmother"
+      },
+      "answer": "A",
+      "explanation": "Maya is the sister of Anu's father, so Maya is Anu's paternal aunt.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "math-004",
+      "domain": "quantitative",
+      "topic": "Sense of Direction",
+      "question": "A person faces north, turns right, then turns right again. Which direction are they facing?",
+      "options": {
+        "A": "South",
+        "B": "East",
+        "C": "West",
+        "D": "North"
+      },
+      "answer": "A",
+      "explanation": "A right turn from north faces east; a second right turn faces south.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "math-005",
+      "domain": "quantitative",
+      "topic": "Time and Angles",
+      "question": "What is the smaller angle between the clock hands at exactly 3 o'clock?",
+      "options": {
+        "A": "90 degrees",
+        "B": "45 degrees",
+        "C": "120 degrees",
+        "D": "180 degrees"
+      },
+      "answer": "A",
+      "explanation": "At 3:00 the minute hand is at 12 and the hour hand at 3; the smaller angle is one quarter turn, or 90 degrees.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "math-006",
+      "domain": "quantitative",
+      "topic": "Position and Ranking",
+      "question": "In a row, Ravi is 8th from the left and 10th from the right. How many people are in the row?",
+      "options": {
+        "A": "17",
+        "B": "16",
+        "C": "18",
+        "D": "19"
+      },
+      "answer": "A",
+      "explanation": "Total people = position from left + position from right − 1 = 8 + 10 − 1 = 17.",
+      "mnemonic": "L + R − 1: the person in the middle was counted from both ends.",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "math-007",
+      "domain": "quantitative",
+      "topic": "Calendar",
+      "question": "If today is Monday, what day of the week will it be 10 days later?",
+      "options": {
+        "A": "Thursday",
+        "B": "Tuesday",
+        "C": "Wednesday",
+        "D": "Friday"
+      },
+      "answer": "A",
+      "explanation": "Ten days is one week plus three days. Three days after Monday is Thursday.",
+      "mnemonic": "For weekday questions, remove full groups of 7 first; only count the remainder.",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "math-008",
+      "domain": "quantitative",
+      "topic": "Clerical Ability",
+      "question": "Which name comes first in alphabetical order?",
+      "options": {
+        "A": "Anil",
+        "B": "Arun",
+        "C": "Biju",
+        "D": "Meera"
+      },
+      "answer": "A",
+      "explanation": "Compare the first letters: A comes before B and M; among Anil and Arun, 'n' comes before 'r'.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "math-009",
+      "domain": "quantitative",
+      "topic": "Fractions",
+      "question": "What is 3/4 of 80?",
+      "options": {
+        "A": "60",
+        "B": "20",
+        "C": "40",
+        "D": "64"
+      },
+      "answer": "A",
+      "explanation": "Divide 80 by 4 to get 20, then multiply by 3: 20 × 3 = 60.",
+      "mnemonic": "For 'fraction of', divide by the bottom, then multiply by the top.",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "bio-001",
+      "domain": "biology",
+      "topic": "Nutrition",
+      "question": "Deficiency of vitamin C can cause which disease?",
+      "options": {
+        "A": "Scurvy",
+        "B": "Rickets",
+        "C": "Night blindness",
+        "D": "Beriberi"
+      },
+      "answer": "A",
+      "explanation": "Vitamin C deficiency causes scurvy; citrus fruits and several vegetables are dietary sources.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "bio-002",
+      "domain": "biology",
+      "topic": "Nutrition",
+      "question": "Deficiency of vitamin D in children can cause which condition?",
+      "options": {
+        "A": "Rickets",
+        "B": "Scurvy",
+        "C": "Pellagra",
+        "D": "Anaemia"
+      },
+      "answer": "A",
+      "explanation": "Vitamin D is needed for healthy bone mineralisation; prolonged deficiency in children can cause rickets.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "bio-003",
+      "domain": "biology",
+      "topic": "Human Body",
+      "question": "Which protein in red blood cells carries most of the oxygen in blood?",
+      "options": {
+        "A": "Haemoglobin",
+        "B": "Insulin",
+        "C": "Keratin",
+        "D": "Pepsin"
+      },
+      "answer": "A",
+      "explanation": "Haemoglobin in red blood cells binds and transports most oxygen in the blood.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "bio-004",
+      "domain": "biology",
+      "topic": "Human Body",
+      "question": "Which organ produces insulin?",
+      "options": {
+        "A": "Pancreas",
+        "B": "Liver",
+        "C": "Kidney",
+        "D": "Lungs"
+      },
+      "answer": "A",
+      "explanation": "Insulin is produced by beta cells in the pancreas and helps regulate blood glucose.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "bio-005",
+      "domain": "biology",
+      "topic": "Human Body",
+      "question": "Which organs filter blood and produce urine?",
+      "options": {
+        "A": "Kidneys",
+        "B": "Lungs",
+        "C": "Stomach",
+        "D": "Pancreas"
+      },
+      "answer": "A",
+      "explanation": "The kidneys filter blood, regulate water and salts, and produce urine.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "bio-006",
+      "domain": "biology",
+      "topic": "Plant Biology",
+      "question": "Which pigment captures much of the light energy used in photosynthesis?",
+      "options": {
+        "A": "Chlorophyll",
+        "B": "Haemoglobin",
+        "C": "Melanin",
+        "D": "Keratin"
+      },
+      "answer": "A",
+      "explanation": "Chlorophyll in plant chloroplasts absorbs light used to drive photosynthesis.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "bio-007",
+      "domain": "biology",
+      "topic": "Plant Biology",
+      "question": "Which gas do green plants take in from the air for photosynthesis?",
+      "options": {
+        "A": "Carbon dioxide",
+        "B": "Oxygen",
+        "C": "Nitrogen",
+        "D": "Hydrogen"
+      },
+      "answer": "A",
+      "explanation": "Plants use carbon dioxide and water to make sugars during photosynthesis, releasing oxygen.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "bio-008",
+      "domain": "biology",
+      "topic": "Human Body",
+      "question": "How many chambers does a typical human heart have?",
+      "options": {
+        "A": "Four",
+        "B": "Two",
+        "C": "Three",
+        "D": "Five"
+      },
+      "answer": "A",
+      "explanation": "The human heart has two atria and two ventricles, making four chambers.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "bio-009",
+      "domain": "biology",
+      "topic": "Public Health",
+      "question": "Tuberculosis is caused by which organism?",
+      "options": {
+        "A": "Mycobacterium tuberculosis",
+        "B": "Plasmodium falciparum",
+        "C": "Vibrio cholerae",
+        "D": "Influenza virus"
+      },
+      "answer": "A",
+      "explanation": "Tuberculosis is caused by bacteria in the Mycobacterium tuberculosis complex and mainly affects the lungs.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "bio-010",
+      "domain": "biology",
+      "topic": "Public Health",
+      "question": "Malaria parasites are commonly transmitted to humans by which mosquito?",
+      "options": {
+        "A": "Female Anopheles mosquito",
+        "B": "Male Aedes mosquito",
+        "C": "Female Culex mosquito only",
+        "D": "Male Anopheles mosquito"
+      },
+      "answer": "A",
+      "explanation": "Female Anopheles mosquitoes transmit malaria parasites when they feed on human blood.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "bio-011",
+      "domain": "biology",
+      "topic": "Human Body",
+      "question": "What is the largest organ of the human body by surface area?",
+      "options": {
+        "A": "Skin",
+        "B": "Liver",
+        "C": "Lung",
+        "D": "Heart"
+      },
+      "answer": "A",
+      "explanation": "Skin is the body's largest organ by surface area and forms an important protective barrier.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "bio-012",
+      "domain": "biology",
+      "topic": "Human Body",
+      "question": "How many chromosomes are normally present in most human body cells?",
+      "options": {
+        "A": "46",
+        "B": "23",
+        "C": "44",
+        "D": "48"
+      },
+      "answer": "A",
+      "explanation": "Most human somatic cells have 46 chromosomes arranged in 23 pairs.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "bio-013",
+      "domain": "biology",
+      "topic": "Public Health",
+      "question": "Vaccines primarily help the immune system to do what?",
+      "options": {
+        "A": "Recognise a pathogen and respond more effectively in the future",
+        "B": "Replace all white blood cells",
+        "C": "Remove the need for clean water",
+        "D": "Stop every infection with certainty"
+      },
+      "answer": "A",
+      "explanation": "Vaccines train immune responses against particular pathogens; protection varies by vaccine and disease.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "bio-014",
+      "domain": "biology",
+      "topic": "Environment",
+      "question": "Which organisms are especially important in decomposing dead organic matter?",
+      "options": {
+        "A": "Bacteria and fungi",
+        "B": "Rocks and minerals",
+        "C": "Only flowering plants",
+        "D": "Only reptiles"
+      },
+      "answer": "A",
+      "explanation": "Many bacteria and fungi break down dead organic matter and return nutrients to ecosystems.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "phy-001",
+      "domain": "physics_chemistry",
+      "topic": "Physics: Units",
+      "question": "What is the SI unit of force?",
+      "options": {
+        "A": "Newton",
+        "B": "Joule",
+        "C": "Watt",
+        "D": "Pascal"
+      },
+      "answer": "A",
+      "explanation": "The newton (N) is the SI unit of force.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "phy-002",
+      "domain": "physics_chemistry",
+      "topic": "Physics: Electricity",
+      "question": "What is the SI unit of electric current?",
+      "options": {
+        "A": "Ampere",
+        "B": "Volt",
+        "C": "Ohm",
+        "D": "Coulomb"
+      },
+      "answer": "A",
+      "explanation": "Electric current is measured in amperes (A).",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "phy-003",
+      "domain": "physics_chemistry",
+      "topic": "Physics: Motion",
+      "question": "Average speed is calculated using which relationship?",
+      "options": {
+        "A": "Distance travelled divided by time taken",
+        "B": "Time taken divided by distance",
+        "C": "Mass multiplied by acceleration",
+        "D": "Distance multiplied by time"
+      },
+      "answer": "A",
+      "explanation": "Average speed equals total distance travelled divided by total time taken.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "phy-004",
+      "domain": "physics_chemistry",
+      "topic": "Physics: Sound",
+      "question": "Why does sound not travel through a perfect vacuum?",
+      "options": {
+        "A": "It needs a material medium to carry vibrations",
+        "B": "Sound is made only of light",
+        "C": "A vacuum is too cold for sound",
+        "D": "Sound travels only in water"
+      },
+      "answer": "A",
+      "explanation": "Sound is a mechanical wave, so it needs matter to transmit vibrations.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "phy-005",
+      "domain": "physics_chemistry",
+      "topic": "Physics: Light",
+      "question": "For reflection from a plane mirror, the angle of incidence is equal to what?",
+      "options": {
+        "A": "The angle of reflection",
+        "B": "The angle of refraction in every material",
+        "C": "Twice the angle of reflection",
+        "D": "Zero in all cases"
+      },
+      "answer": "A",
+      "explanation": "The law of reflection states that the angle of incidence equals the angle of reflection.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "phy-006",
+      "domain": "physics_chemistry",
+      "topic": "Physics: Heat",
+      "question": "What is the SI base unit of thermodynamic temperature?",
+      "options": {
+        "A": "Kelvin",
+        "B": "Celsius",
+        "C": "Fahrenheit",
+        "D": "Calorie"
+      },
+      "answer": "A",
+      "explanation": "The kelvin (K) is the SI base unit of thermodynamic temperature.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "phy-007",
+      "domain": "physics_chemistry",
+      "topic": "Physics: Work and Energy",
+      "question": "What is the SI unit of work and energy?",
+      "options": {
+        "A": "Joule",
+        "B": "Newton",
+        "C": "Watt",
+        "D": "Ampere"
+      },
+      "answer": "A",
+      "explanation": "The joule (J) is the SI unit of both work and energy.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "phy-008",
+      "domain": "physics_chemistry",
+      "topic": "Chemistry: Acids and Bases",
+      "question": "At standard conditions, a solution with pH 7 is described as what?",
+      "options": {
+        "A": "Neutral",
+        "B": "Strongly acidic",
+        "C": "Strongly basic",
+        "D": "A metal"
+      },
+      "answer": "A",
+      "explanation": "A pH of 7 is neutral at 25 °C; lower values are acidic and higher values are basic.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "phy-009",
+      "domain": "physics_chemistry",
+      "topic": "Chemistry: Elements",
+      "question": "What is the atomic number of oxygen?",
+      "options": {
+        "A": "8",
+        "B": "6",
+        "C": "7",
+        "D": "16"
+      },
+      "answer": "A",
+      "explanation": "Oxygen has atomic number 8, meaning its nucleus contains eight protons.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "phy-010",
+      "domain": "physics_chemistry",
+      "topic": "Chemistry: Matter",
+      "question": "What is the chemical formula of water?",
+      "options": {
+        "A": "H₂O",
+        "B": "CO₂",
+        "C": "O₂",
+        "D": "NaCl"
+      },
+      "answer": "A",
+      "explanation": "A water molecule contains two hydrogen atoms and one oxygen atom, written H₂O.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "phy-011",
+      "domain": "physics_chemistry",
+      "topic": "Chemistry: Everyday Science",
+      "question": "Ordinary rusting of iron requires iron, oxygen and the presence of what?",
+      "options": {
+        "A": "Water or moisture",
+        "B": "Helium",
+        "C": "Pure nitrogen only",
+        "D": "Carbon dioxide only"
+      },
+      "answer": "A",
+      "explanation": "Rusting is an oxidation process that normally requires both oxygen and moisture.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "phy-012",
+      "domain": "physics_chemistry",
+      "topic": "Physics: Power",
+      "question": "What is the SI unit of power?",
+      "options": {
+        "A": "Watt",
+        "B": "Joule",
+        "C": "Newton",
+        "D": "Pascal"
+      },
+      "answer": "A",
+      "explanation": "Power is the rate of doing work or transferring energy; its SI unit is the watt.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "phy-013",
+      "domain": "physics_chemistry",
+      "topic": "Chemistry: Acids and Bases",
+      "question": "What colour does blue litmus generally turn in an acidic solution?",
+      "options": {
+        "A": "Red",
+        "B": "Green",
+        "C": "Blue",
+        "D": "White"
+      },
+      "answer": "A",
+      "explanation": "Acids turn blue litmus red; indicators are a simple way to test acidic solutions.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "phy-014",
+      "domain": "physics_chemistry",
+      "topic": "Physics: Motion",
+      "question": "What is the approximate acceleration due to gravity near Earth's surface?",
+      "options": {
+        "A": "9.8 m/s²",
+        "B": "0.98 m/s²",
+        "C": "98 m/s²",
+        "D": "3.0 × 10⁸ m/s²"
+      },
+      "answer": "A",
+      "explanation": "The standard value of gravitational acceleration near Earth's surface is about 9.8 m/s²; it varies slightly by location.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "sci-001",
+      "domain": "science_technology",
+      "topic": "Space Science",
+      "question": "Which Indian organisation is responsible for the national space programme?",
+      "options": {
+        "A": "Indian Space Research Organisation (ISRO)",
+        "B": "Food Safety and Standards Authority of India",
+        "C": "Election Commission of India",
+        "D": "National Green Tribunal"
+      },
+      "answer": "A",
+      "explanation": "ISRO is India's national space agency and conducts the country's space programme.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "sci-002",
+      "domain": "science_technology",
+      "topic": "Space Science",
+      "question": "Which launch vehicle family is used by India to place heavier payloads into orbit?",
+      "options": {
+        "A": "LVM3",
+        "B": "PSLV-C only",
+        "C": "Sounding rockets only",
+        "D": "SLV-3 only"
+      },
+      "answer": "A",
+      "explanation": "LVM3 is ISRO's heavy-lift launch vehicle family. Specific mission configurations and capabilities evolve over time.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "sci-003",
+      "domain": "science_technology",
+      "topic": "Scientific Institutions",
+      "question": "Where is the headquarters of the Indian Space Research Organisation?",
+      "options": {
+        "A": "Bengaluru",
+        "B": "Thiruvananthapuram",
+        "C": "New Delhi",
+        "D": "Hyderabad"
+      },
+      "answer": "A",
+      "explanation": "ISRO's headquarters is in Bengaluru, Karnataka.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "sci-004",
+      "domain": "science_technology",
+      "topic": "Everyday Science",
+      "question": "Which type of electromagnetic radiation is commonly used in remote controls?",
+      "options": {
+        "A": "Infrared radiation",
+        "B": "Gamma rays",
+        "C": "X-rays",
+        "D": "Ultraviolet radiation"
+      },
+      "answer": "A",
+      "explanation": "Many television and appliance remotes transmit control signals using infrared light.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "sci-005",
+      "domain": "science_technology",
+      "topic": "Environment",
+      "question": "Which gas is the main contributor to human-caused global warming?",
+      "options": {
+        "A": "Carbon dioxide",
+        "B": "Argon",
+        "C": "Neon",
+        "D": "Helium"
+      },
+      "answer": "A",
+      "explanation": "Carbon dioxide is the largest contributor to human-caused warming among long-lived greenhouse gases, though other gases also matter.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "sci-006",
+      "domain": "science_technology",
+      "topic": "Energy",
+      "question": "A photovoltaic solar cell converts sunlight directly into what?",
+      "options": {
+        "A": "Electrical energy",
+        "B": "Sound energy",
+        "C": "Nuclear energy",
+        "D": "Only chemical fuel"
+      },
+      "answer": "A",
+      "explanation": "Photovoltaic cells convert light directly into electrical energy through the photovoltaic effect.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "sci-007",
+      "domain": "science_technology",
+      "topic": "Scientific Method",
+      "question": "In a controlled experiment, why is one variable changed at a time when practical?",
+      "options": {
+        "A": "To help identify the effect of that variable",
+        "B": "To make observations unnecessary",
+        "C": "To guarantee every hypothesis is true",
+        "D": "To remove the need for repeated trials"
+      },
+      "answer": "A",
+      "explanation": "Changing one factor while controlling others helps researchers identify which factor caused an observed effect.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "sci-008",
+      "domain": "science_technology",
+      "topic": "Everyday Science",
+      "question": "Which instrument is used to measure atmospheric pressure?",
+      "options": {
+        "A": "Barometer",
+        "B": "Thermometer",
+        "C": "Hygrometer",
+        "D": "Ammeter"
+      },
+      "answer": "A",
+      "explanation": "A barometer measures atmospheric pressure.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "com-001",
+      "domain": "computer",
+      "topic": "Computer Hardware",
+      "question": "Which computer component executes instructions and performs calculations?",
+      "options": {
+        "A": "Central Processing Unit (CPU)",
+        "B": "Monitor",
+        "C": "Keyboard",
+        "D": "Speaker"
+      },
+      "answer": "A",
+      "explanation": "The CPU processes instructions and coordinates many of a computer's operations.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "com-002",
+      "domain": "computer",
+      "topic": "Computer Memory",
+      "question": "Which kind of memory normally loses its contents when power is switched off?",
+      "options": {
+        "A": "RAM",
+        "B": "ROM",
+        "C": "SSD",
+        "D": "Optical disc"
+      },
+      "answer": "A",
+      "explanation": "RAM is volatile working memory; its contents are normally lost when power is removed.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "com-003",
+      "domain": "computer",
+      "topic": "Input and Output Devices",
+      "question": "A keyboard is primarily which type of device?",
+      "options": {
+        "A": "Input device",
+        "B": "Output device",
+        "C": "Network protocol",
+        "D": "Storage medium"
+      },
+      "answer": "A",
+      "explanation": "A keyboard sends text and commands to a computer, so it is an input device.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "com-004",
+      "domain": "computer",
+      "topic": "Computer Storage",
+      "question": "Which is a non-volatile storage device?",
+      "options": {
+        "A": "Solid-state drive (SSD)",
+        "B": "CPU register",
+        "C": "RAM",
+        "D": "Processor cache"
+      },
+      "answer": "A",
+      "explanation": "An SSD keeps stored data when power is off and is used for persistent storage.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "com-005",
+      "domain": "computer",
+      "topic": "Internet Basics",
+      "question": "What is the main purpose of a web browser?",
+      "options": {
+        "A": "To retrieve and display web pages",
+        "B": "To physically connect a computer to electricity",
+        "C": "To replace an operating system",
+        "D": "To measure network temperature"
+      },
+      "answer": "A",
+      "explanation": "A browser requests web resources and displays pages; a search engine helps locate pages.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "com-006",
+      "domain": "computer",
+      "topic": "Cyber Safety",
+      "question": "What is phishing?",
+      "options": {
+        "A": "A deceptive attempt to obtain sensitive information by impersonation",
+        "B": "A method of safely backing up files",
+        "C": "A type of computer monitor",
+        "D": "A system for compressing video"
+      },
+      "answer": "A",
+      "explanation": "Phishing messages imitate trusted sources to trick people into revealing passwords or financial information.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "com-007",
+      "domain": "computer",
+      "topic": "Computer Networks",
+      "question": "A Local Area Network (LAN) usually connects devices across what scale?",
+      "options": {
+        "A": "A limited local area such as a room, office or building",
+        "B": "The entire planet only",
+        "C": "Only under the ocean",
+        "D": "Several countries with no routers"
+      },
+      "answer": "A",
+      "explanation": "A LAN connects devices in a relatively small area, such as a home, school or office.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "com-008",
+      "domain": "computer",
+      "topic": "Software",
+      "question": "Which software manages computer hardware and provides services for applications?",
+      "options": {
+        "A": "Operating system",
+        "B": "Spreadsheet",
+        "C": "Web page",
+        "D": "Image file"
+      },
+      "answer": "A",
+      "explanation": "An operating system manages hardware resources and provides common services for applications.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "com-009",
+      "domain": "computer",
+      "topic": "Internet Basics",
+      "question": "What does HTTPS indicate about a web connection?",
+      "options": {
+        "A": "The connection uses encrypted transport between the browser and site",
+        "B": "The website is guaranteed to be honest",
+        "C": "The website contains no advertisements",
+        "D": "The internet is working without any server"
+      },
+      "answer": "A",
+      "explanation": "HTTPS uses TLS to protect data in transit; it does not guarantee that a site itself is trustworthy.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "com-010",
+      "domain": "computer",
+      "topic": "Office Applications",
+      "question": "Which application is best suited to calculations arranged in rows and columns?",
+      "options": {
+        "A": "Spreadsheet software",
+        "B": "A text editor only",
+        "C": "A media player",
+        "D": "A drawing tablet driver"
+      },
+      "answer": "A",
+      "explanation": "Spreadsheet applications organise data in cells and provide formulas, tables and charts.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "eng-001",
+      "domain": "english",
+      "topic": "Subject-Verb Agreement",
+      "question": "Choose the correct verb: 'Each of the students ___ submitted the form.'",
+      "options": {
+        "A": "has",
+        "B": "have",
+        "C": "are",
+        "D": "were"
+      },
+      "answer": "A",
+      "explanation": "'Each' is singular, so it takes the singular verb 'has'.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "eng-002",
+      "domain": "english",
+      "topic": "Subject-Verb Agreement",
+      "question": "Choose the correct verb: 'Neither Ravi nor Rani ___ present today.'",
+      "options": {
+        "A": "is",
+        "B": "are",
+        "C": "were",
+        "D": "have"
+      },
+      "answer": "A",
+      "explanation": "With 'neither...nor', the verb generally agrees with the nearer subject; here 'Rani' is singular.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "eng-003",
+      "domain": "english",
+      "topic": "Articles",
+      "question": "Choose the correct article: 'She is ___ honest officer.'",
+      "options": {
+        "A": "an",
+        "B": "a",
+        "C": "the",
+        "D": "no article"
+      },
+      "answer": "A",
+      "explanation": "'Honest' begins with a vowel sound because its 'h' is silent, so 'an' is used.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "eng-004",
+      "domain": "english",
+      "topic": "Prepositions",
+      "question": "Choose the correct word: 'I have lived here ___ 2020.'",
+      "options": {
+        "A": "since",
+        "B": "for",
+        "C": "by",
+        "D": "during"
+      },
+      "answer": "A",
+      "explanation": "Use 'since' with the starting point of a period; use 'for' with its duration.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "eng-005",
+      "domain": "english",
+      "topic": "Conditionals",
+      "question": "Complete the second conditional: 'If I ___ more time, I would help.'",
+      "options": {
+        "A": "had",
+        "B": "have",
+        "C": "will have",
+        "D": "am having"
+      },
+      "answer": "A",
+      "explanation": "A second conditional uses a past-form verb in the if-clause and 'would' in the result clause.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "eng-006",
+      "domain": "english",
+      "topic": "Degrees of Comparison",
+      "question": "Choose the correct comparative form of 'good'.",
+      "options": {
+        "A": "better",
+        "B": "gooder",
+        "C": "best",
+        "D": "more good"
+      },
+      "answer": "A",
+      "explanation": "'Good' is irregular: good, better, best.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "eng-007",
+      "domain": "english",
+      "topic": "Active and Passive Voice",
+      "question": "Choose the passive form of 'They have completed the task.'",
+      "options": {
+        "A": "The task has been completed by them.",
+        "B": "The task had completed them.",
+        "C": "They were completed by the task.",
+        "D": "The task is completing them."
+      },
+      "answer": "A",
+      "explanation": "In the present perfect passive, use 'has/have been' plus the past participle.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "eng-008",
+      "domain": "english",
+      "topic": "Direct and Indirect Speech",
+      "question": "In reported speech, 'He said, “I am tired”' becomes which sentence?",
+      "options": {
+        "A": "He said that he was tired.",
+        "B": "He said that I am tired.",
+        "C": "He says that he tired.",
+        "D": "He said that he is tiring."
+      },
+      "answer": "A",
+      "explanation": "When the reporting verb is in the past, the present tense commonly shifts back: 'am' becomes 'was'.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "eng-009",
+      "domain": "english",
+      "topic": "Phrasal Verbs",
+      "question": "What does the phrasal verb 'look after' mean?",
+      "options": {
+        "A": "To take care of",
+        "B": "To search above",
+        "C": "To postpone",
+        "D": "To reject"
+      },
+      "answer": "A",
+      "explanation": "'Look after' means to care for or be responsible for someone or something.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "eng-010",
+      "domain": "english",
+      "topic": "Synonyms",
+      "question": "Choose the closest synonym of 'abundant'.",
+      "options": {
+        "A": "Plentiful",
+        "B": "Scarce",
+        "C": "Fragile",
+        "D": "Silent"
+      },
+      "answer": "A",
+      "explanation": "'Abundant' means existing in large quantities; 'plentiful' is a close synonym.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "eng-011",
+      "domain": "english",
+      "topic": "Antonyms",
+      "question": "Choose the antonym of 'scarce'.",
+      "options": {
+        "A": "Plentiful",
+        "B": "Rare",
+        "C": "Limited",
+        "D": "Insufficient"
+      },
+      "answer": "A",
+      "explanation": "'Scarce' means in short supply; 'plentiful' means available in abundance.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "eng-012",
+      "domain": "english",
+      "topic": "Plural Forms",
+      "question": "What is the plural form of 'criterion'?",
+      "options": {
+        "A": "criteria",
+        "B": "criterions",
+        "C": "criterias",
+        "D": "criterium"
+      },
+      "answer": "A",
+      "explanation": "'Criterion' is a Greek-derived noun; its plural form is 'criteria'.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "eng-013",
+      "domain": "english",
+      "topic": "Collective Nouns",
+      "question": "Which collective noun commonly describes a group of birds?",
+      "options": {
+        "A": "A flock",
+        "B": "A pride",
+        "C": "A herd",
+        "D": "A swarm of cattle"
+      },
+      "answer": "A",
+      "explanation": "A group of birds is commonly called a flock.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "eng-014",
+      "domain": "english",
+      "topic": "Spelling",
+      "question": "Which spelling is correct?",
+      "options": {
+        "A": "accommodation",
+        "B": "accomodation",
+        "C": "acommodation",
+        "D": "accommadation"
+      },
+      "answer": "A",
+      "explanation": "The correct spelling is 'accommodation', with two c's and two m's.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "eng-015",
+      "domain": "english",
+      "topic": "One-Word Substitutions",
+      "question": "What is a person who compiles dictionaries called?",
+      "options": {
+        "A": "A lexicographer",
+        "B": "A biographer",
+        "C": "A cartographer",
+        "D": "A stenographer"
+      },
+      "answer": "A",
+      "explanation": "A lexicographer writes or edits dictionaries.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "eng-016",
+      "domain": "english",
+      "topic": "Idioms",
+      "question": "What does the idiom 'break the ice' usually mean?",
+      "options": {
+        "A": "To make people feel more relaxed at the start of an interaction",
+        "B": "To damage a frozen lake",
+        "C": "To end a friendship",
+        "D": "To postpone a meeting"
+      },
+      "answer": "A",
+      "explanation": "'Break the ice' means to ease tension or begin friendly conversation in a social situation.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "eng-017",
+      "domain": "english",
+      "topic": "Prefixes",
+      "question": "Which prefix changes 'possible' to its opposite?",
+      "options": {
+        "A": "im-",
+        "B": "re-",
+        "C": "pre-",
+        "D": "sub-"
+      },
+      "answer": "A",
+      "explanation": "The prefix 'im-' forms 'impossible', meaning not possible.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "eng-018",
+      "domain": "english",
+      "topic": "Gerunds and Infinitives",
+      "question": "Choose the correct form: 'She enjoys ___ novels.'",
+      "options": {
+        "A": "reading",
+        "B": "to read",
+        "C": "read",
+        "D": "to reading"
+      },
+      "answer": "A",
+      "explanation": "The verb 'enjoy' is normally followed by a gerund, so 'reading' is correct.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "eng-019",
+      "domain": "english",
+      "topic": "Pronouns",
+      "question": "Choose the correct pronoun: 'The secret is between you and ___.'",
+      "options": {
+        "A": "me",
+        "B": "I",
+        "C": "myself",
+        "D": "mine"
+      },
+      "answer": "A",
+      "explanation": "The preposition 'between' takes the objective pronoun 'me'.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "eng-020",
+      "domain": "english",
+      "topic": "Parts of Speech",
+      "question": "In 'The child spoke softly', which word is the adverb?",
+      "options": {
+        "A": "softly",
+        "B": "child",
+        "C": "spoke",
+        "D": "the"
+      },
+      "answer": "A",
+      "explanation": "'Softly' modifies the verb 'spoke' and tells how the child spoke, so it is an adverb.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "eng-021",
+      "domain": "english",
+      "topic": "Tenses",
+      "question": "Choose the future perfect form: 'By Friday, we ___ the project.'",
+      "options": {
+        "A": "will have finished",
+        "B": "finish",
+        "C": "finished",
+        "D": "will finishing"
+      },
+      "answer": "A",
+      "explanation": "The future perfect uses 'will have' followed by the past participle.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "eng-022",
+      "domain": "english",
+      "topic": "Prepositions",
+      "question": "Choose the correct phrase: '___ the heavy rain, the match continued.'",
+      "options": {
+        "A": "In spite of",
+        "B": "Because",
+        "C": "Although of",
+        "D": "Despite of"
+      },
+      "answer": "A",
+      "explanation": "'In spite of' is followed by a noun phrase; 'despite' is used without 'of'.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "eng-023",
+      "domain": "english",
+      "topic": "Correlatives",
+      "question": "Complete the pair: 'Neither the teacher ___ the students were late.'",
+      "options": {
+        "A": "nor",
+        "B": "or",
+        "C": "and",
+        "D": "but"
+      },
+      "answer": "A",
+      "explanation": "The standard correlative pair is 'neither...nor'.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "eng-024",
+      "domain": "english",
+      "topic": "Subject-Verb Agreement",
+      "question": "Choose the correct verb: 'A number of applicants ___ waiting outside.'",
+      "options": {
+        "A": "are",
+        "B": "is",
+        "C": "was",
+        "D": "has"
+      },
+      "answer": "A",
+      "explanation": "'A number of' means several and normally takes a plural verb.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "eng-025",
+      "domain": "english",
+      "topic": "Countable and Uncountable Nouns",
+      "question": "Which sentence uses 'advice' correctly?",
+      "options": {
+        "A": "She gave me some useful advice.",
+        "B": "She gave me many advices.",
+        "C": "She gave me an advice.",
+        "D": "She gave me two advice."
+      },
+      "answer": "A",
+      "explanation": "'Advice' is normally an uncountable noun in standard English; say 'some advice' or 'a piece of advice'.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "eng-026",
+      "domain": "english",
+      "topic": "Vocabulary",
+      "question": "What does the word 'benevolent' mean?",
+      "options": {
+        "A": "Kind and charitable",
+        "B": "Careless and forgetful",
+        "C": "Hostile and angry",
+        "D": "Difficult to see"
+      },
+      "answer": "A",
+      "explanation": "'Benevolent' describes a person or action that is kind and well-meaning.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "mal-001",
+      "domain": "malayalam",
+      "topic": "പര്യായപദം",
+      "question": "‘സന്തോഷം’ എന്ന പദത്തിന്റെ പര്യായം ഏത്?",
+      "options": {
+        "A": "ആനന്ദം",
+        "B": "ദുഃഖം",
+        "C": "ഭയം",
+        "D": "കോപം"
+      },
+      "answer": "A",
+      "explanation": "‘സന്തോഷം’ എന്നതിന് അടുത്ത അർത്ഥമുള്ള പദമാണ് ‘ആനന്ദം’.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "mal-002",
+      "domain": "malayalam",
+      "topic": "വിപരീതപദം",
+      "question": "‘ഉയരം’ എന്ന പദത്തിന്റെ വിപരീതപദം ഏത്?",
+      "options": {
+        "A": "താഴ്ച",
+        "B": "വിസ്താരം",
+        "C": "ദൂരം",
+        "D": "ഭാരം"
+      },
+      "answer": "A",
+      "explanation": "‘ഉയരം’ എന്നതിന്റെ വിപരീത അർത്ഥം ‘താഴ്ച’ എന്നാണ്.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "mal-003",
+      "domain": "malayalam",
+      "topic": "പര്യായപദം",
+      "question": "‘വനം’ എന്ന പദത്തിന്റെ പര്യായം ഏത്?",
+      "options": {
+        "A": "കാട്",
+        "B": "നഗരം",
+        "C": "കടൽ",
+        "D": "പർവതം"
+      },
+      "answer": "A",
+      "explanation": "‘വനം’ എന്നതിന് സമാനമായ പദമാണ് ‘കാട്’.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "mal-004",
+      "domain": "malayalam",
+      "topic": "വിപരീതപദം",
+      "question": "‘പ്രകാശം’ എന്ന പദത്തിന്റെ വിപരീതം ഏത്?",
+      "options": {
+        "A": "ഇരുട്ട്",
+        "B": "തിളക്കം",
+        "C": "നിറം",
+        "D": "ശബ്ദം"
+      },
+      "answer": "A",
+      "explanation": "‘പ്രകാശം’ എന്നതിന്റെ വിപരീതപദമാണ് ‘ഇരുട്ട്’.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "mal-005",
+      "domain": "malayalam",
+      "topic": "ശരിയായ പദം",
+      "question": "‘പുതിയത്’ എന്ന പദത്തിന്റെ വിപരീതം ഏത്?",
+      "options": {
+        "A": "പഴയത്",
+        "B": "നല്ലത്",
+        "C": "വലിയത്",
+        "D": "വേഗം"
+      },
+      "answer": "A",
+      "explanation": "‘പുതിയത്’ എന്നതിന്റെ വിപരീത അർത്ഥമുള്ള പദമാണ് ‘പഴയത്’.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "mal-006",
+      "domain": "malayalam",
+      "topic": "ബഹുവചനം",
+      "question": "‘മരം’ എന്ന പദത്തിന്റെ ബഹുവചനം ഏത്?",
+      "options": {
+        "A": "മരങ്ങൾ",
+        "B": "മരത്തിൽ",
+        "C": "മരത്തിന്റെ",
+        "D": "മരമായി"
+      },
+      "answer": "A",
+      "explanation": "‘മരം’ എന്ന നാമത്തിന്റെ സാധാരണ ബഹുവചനരൂപമാണ് ‘മരങ്ങൾ’.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "mal-007",
+      "domain": "malayalam",
+      "topic": "പര്യായപദം",
+      "question": "‘ജലം’ എന്ന പദത്തിന് സമാനമായ പദം ഏത്?",
+      "options": {
+        "A": "വെള്ളം",
+        "B": "കാറ്റ്",
+        "C": "മണ്ണ്",
+        "D": "തീ"
+      },
+      "answer": "A",
+      "explanation": "‘ജലം’ എന്ന സംസ്കൃതപദത്തിന് മലയാളത്തിലെ സാധാരണ സമാനപദമാണ് ‘വെള്ളം’.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "mal-008",
+      "domain": "malayalam",
+      "topic": "പര്യായപദം",
+      "question": "‘സുന്ദരം’ എന്ന പദത്തിന്റെ പര്യായം ഏത്?",
+      "options": {
+        "A": "മനോഹരം",
+        "B": "അസത്യം",
+        "C": "കഠിനം",
+        "D": "നിശ്ശബ്ദം"
+      },
+      "answer": "A",
+      "explanation": "‘സുന്ദരം’ എന്നും ‘മനോഹരം’ എന്നും മനോഹാരിതയെ സൂചിപ്പിക്കുന്നു.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "mal-009",
+      "domain": "malayalam",
+      "topic": "വിപരീതപദം",
+      "question": "‘വിജയം’ എന്ന പദത്തിന്റെ വിപരീതം ഏത്?",
+      "options": {
+        "A": "പരാജയം",
+        "B": "പ്രയത്നം",
+        "C": "പുരോഗതി",
+        "D": "സഹായം"
+      },
+      "answer": "A",
+      "explanation": "‘വിജയം’ എന്നതിന്റെ വിപരീതപദമാണ് ‘പരാജയം’.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "mal-010",
+      "domain": "malayalam",
+      "topic": "സ്ത്രീലിംഗം",
+      "question": "‘അധ്യാപകൻ’ എന്നതിന്റെ സ്ത്രീലിംഗരൂപം ഏത്?",
+      "options": {
+        "A": "അധ്യാപിക",
+        "B": "അധ്യാപകർ",
+        "C": "അധ്യാപനം",
+        "D": "അധ്യാപകത്വം"
+      },
+      "answer": "A",
+      "explanation": "‘അധ്യാപകൻ’ എന്ന പദത്തിന്റെ സ്ത്രീലിംഗരൂപമാണ് ‘അധ്യാപിക’.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "mal-011",
+      "domain": "malayalam",
+      "topic": "പര്യായപദം",
+      "question": "‘സുഹൃത്ത്’ എന്ന പദത്തിന്റെ പര്യായം ഏത്?",
+      "options": {
+        "A": "മിത്രം",
+        "B": "ശത്രു",
+        "C": "അപരിചിതൻ",
+        "D": "വൈരി"
+      },
+      "answer": "A",
+      "explanation": "‘സുഹൃത്ത്’ എന്നതിന് സമാനമായ പദമാണ് ‘മിത്രം’.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    },
+    {
+      "id": "mal-012",
+      "domain": "malayalam",
+      "topic": "വിപരീതപദം",
+      "question": "‘വലുത്’ എന്ന പദത്തിന്റെ വിപരീതം ഏത്?",
+      "options": {
+        "A": "ചെറുത്",
+        "B": "ഉയരം",
+        "C": "പഴയത്",
+        "D": "അടുത്തത്"
+      },
+      "answer": "A",
+      "explanation": "‘വലുത്’ എന്നതിന്റെ വിപരീത അർത്ഥമുള്ള പദമാണ് ‘ചെറുത്’.",
+      "mnemonic": "",
+      "difficulty": 4,
+      "source_hint": ""
+    }
+  ],
+  "disclaimer": "Original offline practice examples, not official Kerala PSC questions or a past-paper archive."
+}

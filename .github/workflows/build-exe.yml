@@ -1,0 +1,161 @@
+name: Build and release Windows EXE
+
+on:
+  push:
+    branches:
+      - main
+      - arena/01a106e9-psc-coaching-app
+    paths:
+      - "PSCapp.pyw"
+      - "psc_coach/**"
+      - "installer/**"
+      - "tests/**"
+      - "requirements-build.txt"
+      - "build_exe.bat"
+      - ".github/workflows/build-exe.yml"
+  pull_request:
+    paths:
+      - "PSCapp.pyw"
+      - "psc_coach/**"
+      - "installer/**"
+      - "tests/**"
+      - "requirements-build.txt"
+      - "build_exe.bat"
+      - ".github/workflows/build-exe.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    name: Test the learning engine
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Compile and run tests
+        run: |
+          python -m compileall -q PSCapp.pyw psc_coach tests
+          python -m unittest discover -s tests -v
+
+  build:
+    name: Package Windows app and installer
+    needs: test
+    runs-on: windows-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Install build tools
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements-build.txt
+          choco install innosetup --yes --no-progress
+      - name: Check the Tkinter desktop module
+        run: python -c "import tkinter; import psc_coach.ui"
+      - name: Stamp this build with a unique version
+        shell: pwsh
+        run: |
+          $version = "2.0.${{ github.run_number }}"
+          Set-Content -Path psc_coach/build_info.py -Value "APP_VERSION = `"$version`"`n" -Encoding utf8 -NoNewline
+          $iss = Get-Content installer/KeralaPSCCoach.iss -Raw
+          $iss = $iss.Replace('#define AppVersion "2.0.0"', "#define AppVersion `"$version`"")
+          $fileVersion = "$version.0"
+          $iss = $iss.Replace('#define FileVersion "2.0.0.0"', "#define FileVersion `"$fileVersion`"")
+          Set-Content -Path installer/KeralaPSCCoach.iss -Value $iss -Encoding utf8 -NoNewline
+          "PSC_COACH_VERSION=$version" >> $env:GITHUB_ENV
+      - name: Build the portable Windows executable
+        run: >-
+          python -m PyInstaller --clean --noconfirm --onefile --windowed
+          --name KeralaPSCCoach PSCapp.pyw
+      - name: Build the install/update setup
+        shell: pwsh
+        run: |
+          $iscc = Join-Path ${env:ProgramFiles(x86)} "Inno Setup 6\ISCC.exe"
+          if (-not (Test-Path $iscc)) { throw "Inno Setup compiler was not found at $iscc" }
+          & $iscc "installer\KeralaPSCCoach.iss"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Upload downloadable Windows builds
+        uses: actions/upload-artifact@v7
+        with:
+          name: KeralaPSC-Coach-Windows
+          path: |
+            dist/KeralaPSCCoach.exe
+            dist/KeralaPSCCoach-Setup.exe
+          if-no-files-found: error
+          retention-days: 30
+
+  publish-latest:
+    name: Update the rolling Latest release
+    needs: build
+    if: >-
+      github.event_name != 'pull_request' &&
+      (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/arena/01a106e9-psc-coaching-app')
+    runs-on: ubuntu-24.04
+    concurrency:
+      group: kerala-psc-coach-latest-release
+      cancel-in-progress: false
+    steps:
+      - name: Download Windows builds
+        uses: actions/download-artifact@v8
+        with:
+          name: KeralaPSC-Coach-Windows
+          path: release-assets
+      - name: Publish or update the public Latest release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          PSC_COACH_VERSION: 2.0.${{ github.run_number }}
+        run: |
+          set -euo pipefail
+          latest_branch_sha="$(gh api "repos/${GITHUB_REPOSITORY}/commits/${GITHUB_REF_NAME}" --jq .sha)"
+          if [[ "$latest_branch_sha" != "$GITHUB_SHA" ]]; then
+            echo "Skipping this stale build; a newer commit is already on ${GITHUB_REF_NAME}."
+            exit 0
+          fi
+
+          current_run="${GITHUB_RUN_NUMBER}"
+          if gh release view latest >/dev/null 2>&1; then
+            old_title="$(gh release view latest --json name --jq .name)"
+            old_run="$(printf '%s' "$old_title" | grep -oE '2\.0\.[0-9]+' | tail -1 | awk -F. '{print $3}' || true)"
+            if [[ -n "$old_run" && "$current_run" -lt "$old_run" ]]; then
+              echo "Skipping an older queued workflow run ($current_run < $old_run)."
+              exit 0
+            fi
+          fi
+
+          tag_ref="refs/tags/latest"
+          if gh api "repos/${GITHUB_REPOSITORY}/git/ref/tags/latest" >/dev/null 2>&1; then
+            gh api --method PATCH "repos/${GITHUB_REPOSITORY}/git/refs/tags/latest" \
+              -f "sha=${GITHUB_SHA}" -F force=true >/dev/null
+          else
+            gh api --method POST "repos/${GITHUB_REPOSITORY}/git/refs" \
+              -f "ref=${tag_ref}" -f "sha=${GITHUB_SHA}" >/dev/null
+          fi
+
+          notes="Automatically built from commit ${GITHUB_SHA}. Download KeralaPSCCoach-Setup.exe and run it over your previous install to update; your local profile is kept."
+          if gh release view latest >/dev/null 2>&1; then
+            gh release upload latest \
+              release-assets/KeralaPSCCoach.exe \
+              release-assets/KeralaPSCCoach-Setup.exe \
+              --clobber
+            gh release edit latest \
+              --title "Kerala PSC Coach ${PSC_COACH_VERSION}" \
+              --notes "$notes" \
+              --latest
+          else
+            gh release create latest \
+              release-assets/KeralaPSCCoach.exe \
+              release-assets/KeralaPSCCoach-Setup.exe \
+              --title "Kerala PSC Coach ${PSC_COACH_VERSION}" \
+              --notes "$notes" \
+              --latest
+          fi

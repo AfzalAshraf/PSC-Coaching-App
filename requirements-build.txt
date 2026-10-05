@@ -1,0 +1,2 @@
+# Only needed when packaging a standalone Windows executable.
+PyInstaller>=6.11,<7
